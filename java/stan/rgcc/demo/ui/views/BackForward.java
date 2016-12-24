@@ -6,14 +6,13 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 
 import stan.rgcc.demo.R;
 
@@ -27,12 +26,77 @@ public class BackForward
     private boolean drawRipple;
     private int leftX;
     private int leftY;
+    private int centerY;
     private int rightX;
     private int outerSize;
+    private int dSize;
+    private float shadowX;
+    private float shadowY;
     private int shadowCircleSize;
     private boolean drawShadow;
 
     private int circleSize;
+
+    private final Animator.AnimatorListener hideShadow = new Animator.AnimatorListener()
+    {
+        @Override
+        public void onAnimationStart(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationEnd(Animator animator)
+        {
+            drawShadow = false;
+        }
+        @Override
+        public void onAnimationCancel(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationRepeat(Animator animator)
+        {
+        }
+    };
+    private final Animator.AnimatorListener reopenShadow = new Animator.AnimatorListener()
+    {
+        @Override
+        public void onAnimationStart(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationEnd(Animator animator)
+        {
+            animateShowShadow();
+        }
+        @Override
+        public void onAnimationCancel(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationRepeat(Animator animator)
+        {
+        }
+    };
+    private final Animator.AnimatorListener hideShadowProxy = new Animator.AnimatorListener()
+    {
+        @Override
+        public void onAnimationStart(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationEnd(Animator animator)
+        {
+            animateHideShadow();
+        }
+        @Override
+        public void onAnimationCancel(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationRepeat(Animator animator)
+        {
+        }
+    };
 
     private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint shadowPaint = new Paint();
@@ -41,6 +105,7 @@ public class BackForward
 
     private AnimatorSet rippleAnimation;
     private AnimatorSet circleAnimation;
+    private AccelerateDecelerateInterpolator interpolator;
 
     public BackForward(Context context, AttributeSet attrs)
     {
@@ -68,18 +133,17 @@ public class BackForward
         outerPaint.setColor(getResources().getColor(R.color.graylight));
         ripplePaint.setStyle(Paint.Style.FILL);
         ripplePaint.setColor(getResources().getColor(R.color.white_trans));
-//        shadowPaint.setStyle(Paint.Style.FILL);
-//        shadowPaint.setColor(getResources().getColor(R.color.black));
-//        shadowPaint.setARGB(255, 51, 153, 255);
-        setLayerType(LAYER_TYPE_SOFTWARE, shadowPaint);
+        shadowPaint.setStyle(Paint.Style.FILL);
         rippleAnimation = new AnimatorSet();
         circleAnimation = new AnimatorSet();
+        interpolator = new AccelerateDecelerateInterpolator();
         post(new Runnable()
         {
             @Override
             public void run()
             {
                 leftY = getHeight()/2;
+                centerY = getHeight()/2;
                 Log.e(getClass().getName(), "h " + leftY);
                 setOnClickListener(new OnClickListener()
                 {
@@ -104,11 +168,16 @@ public class BackForward
         recalculate();
     }
 
+    public void setShadowCircleSize(int value)
+    {
+        shadowCircleSize = value;
+        Log.e(getClass().getName(), "shadowCircleSize " + shadowCircleSize);
+        invalidate();
+    }
     public void setLeftY(int value)
     {
         leftY = value;
         Log.e(getClass().getName(), "leftY " + leftY);
-        int centerY = getHeight()/2;
         shadowCircleSize = (int)(circleSize*0.9) - (leftY-(centerY+(int)(circleSize*0.1)));
         shadowPaint.setShadowLayer((int)((leftY - centerY)*1.8),0,0, getResources().getColor(R.color.black));
         invalidate();
@@ -132,12 +201,7 @@ public class BackForward
     }
     private void invalidateRipple()
     {
-        int centerY = getHeight()/2;
-        float l = Math.abs(leftX-rippleX);
-        float h = Math.abs(centerY-rippleY);
-        double tmp = circleSize*(1-(Math.sqrt(l*l+h*h)/rippleCircleStartSize));
-        rippleCircleSize = (int)tmp;
-        Log.e(getClass().getName(), "rippleCircleSize " + rippleCircleSize + " tmp " + tmp);
+        rippleCircleSize = (int)(circleSize*(1-(Math.sqrt(Math.abs(leftX-rippleX)*Math.abs(leftX-rippleX)+Math.abs(centerY-rippleY)*Math.abs(centerY-rippleY))/rippleCircleStartSize)));
         invalidate();
     }
 
@@ -174,61 +238,50 @@ public class BackForward
     private void touchDown(float x, float y)
     {
         Log.e(getClass().getName(), "touchDown " + x + " " + y);
+        animateShowShadow();
+    }
+    private void animateShowShadow()
+    {
         circleAnimation.removeAllListeners();
         circleAnimation.cancel();
         circleAnimation = new AnimatorSet();
-        int centerY = getHeight()/2;
-        circleAnimation.play(ObjectAnimator.ofInt(this, "leftY", centerY, centerY + (int)(circleSize*0.1)));
-        circleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-        circleAnimation.setDuration(250);
+        shadowX = leftX;
+        shadowY = leftY + (outerSize - circleSize)/2;
+        circleAnimation.play(ObjectAnimator.ofInt(this, "shadowCircleSize", shadowCircleSize, outerSize));
+        circleAnimation.setInterpolator(interpolator);
+        circleAnimation.setDuration(300);
         drawShadow = true;
+        circleAnimation.start();
+    }
+    private void animateHideShadow()
+    {
+        circleAnimation.removeAllListeners();
+        circleAnimation.cancel();
+        circleAnimation = new AnimatorSet();
+        circleAnimation.play(ObjectAnimator.ofInt(this, "shadowCircleSize", shadowCircleSize, dSize));
+        circleAnimation.setInterpolator(interpolator);
+        circleAnimation.setDuration(300);
+        circleAnimation.addListener(hideShadow);
         circleAnimation.start();
     }
     private void touchUp(float x, float y)
     {
         if(circleAnimation.isStarted())
         {
-            circleAnimation.addListener(new Animator.AnimatorListener()
-            {
-                @Override
-                public void onAnimationStart(Animator animator)
-                {
-
-                }
-                @Override
-                public void onAnimationEnd(Animator animator)
-                {
-                    circleBack();
-                }
-                @Override
-                public void onAnimationCancel(Animator animator)
-                {
-
-                }
-                @Override
-                public void onAnimationRepeat(Animator animator)
-                {
-
-                }
-            });
+            circleAnimation.addListener(hideShadowProxy);
         }
         else
         {
-            circleBack();
+            animateHideShadow();
         }
         Log.e(getClass().getName(), "touchUp " + x + " " + y);
-        int centerY = getHeight()/2;
-        float l = Math.abs(leftX-x);
-        l*=l;
-        float h = Math.abs(leftY-y);
-        h*=h;
-        rippleCircleStartSize = (int)Math.sqrt(l+h);
+        rippleCircleStartSize = (int)Math.sqrt(Math.abs(leftX-x)*Math.abs(leftX-x)+Math.abs(leftY-y)*Math.abs(leftY-y));
         Log.e(getClass().getName(), "rippleCircleStartSize " + rippleCircleStartSize);
         rippleAnimation.removeAllListeners();
         rippleAnimation.cancel();
         rippleAnimation = new AnimatorSet();
         drawRipple = true;
-        rippleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        rippleAnimation.setInterpolator(interpolator);
         rippleAnimation.play(ObjectAnimator.ofFloat(this, "rippleX", x, leftX)).with(ObjectAnimator.ofFloat(this, "rippleY", y, centerY));
         rippleAnimation.setDuration(300);
         rippleAnimation.addListener(new Animator.AnimatorListener()
@@ -256,14 +309,14 @@ public class BackForward
         });
         rippleAnimation.start();
     }
-    private void circleBack()
+    private void buttonDown()
     {
         circleAnimation.removeAllListeners();
         circleAnimation.cancel();
         circleAnimation = new AnimatorSet();
-        circleAnimation.play(ObjectAnimator.ofInt(this, "leftY", leftY, getHeight()/2));
-        circleAnimation.setInterpolator(new LinearInterpolator());
-        circleAnimation.setDuration(250);
+        circleAnimation.play(ObjectAnimator.ofInt(this, "shadowCircleSize", shadowCircleSize, dSize));
+        circleAnimation.setInterpolator(interpolator);
+        circleAnimation.setDuration(300);
         circleAnimation.addListener(new Animator.AnimatorListener()
         {
             @Override
@@ -325,23 +378,34 @@ public class BackForward
     @Override
     protected void onDraw(Canvas canvas)
     {
-        int y = getHeight()/2;
-        canvas.drawCircle(leftX, y, outerSize, outerPaint);
-        canvas.drawCircle(rightX, y, outerSize, outerPaint);
-        canvas.drawRect(leftX, y-outerSize, rightX, y+outerSize, outerPaint);
+        canvas.drawCircle(leftX, centerY, outerSize, outerPaint);
+        canvas.drawCircle(rightX, centerY, outerSize, outerPaint);
+        canvas.drawRect(leftX, centerY-outerSize, rightX, centerY+outerSize, outerPaint);
         if(drawShadow)
         {
-            canvas.drawCircle(leftX, leftY, shadowCircleSize, shadowPaint);
+            drawShadow(canvas);
         }
-        canvas.drawCircle(leftX, y, circleSize, circlePaint);
-        canvas.drawCircle(rightX, y, circleSize, circlePaint);
+        canvas.drawCircle(leftX, centerY, circleSize, circlePaint);
+        canvas.drawCircle(rightX, centerY, circleSize, circlePaint);
         if(drawRipple)
         {
             canvas.drawCircle(rippleX, rippleY, rippleCircleSize, ripplePaint);
         }
     }
 
+    private void drawShadow(Canvas canvas)
+    {
+        for(int i=shadowCircleSize; i>=dSize; i--)
+        {
+            float alpha = i * 255;
+            Log.e(getClass().getName(), "alpha " + alpha);
+            shadowPaint.setColor(Color.argb((int)(255 - alpha/shadowCircleSize)/5,0,0,0));
+            canvas.drawCircle(shadowX, shadowY, i, shadowPaint);
+        }
+    }
+
     private void recalculate()
     {
+        dSize = circleSize-(outerSize-circleSize);
     }
 }
