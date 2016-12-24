@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="Circlable">
+        <attr name="circle_size" format="dimension"/>
+        <attr name="circle_color" format="color"/>
+    </declare-styleable>
     <declare-styleable name="Switch">
         <attr name="text_color" format="color"/>
-        <attr name="circle_color" format="color"/>
         <attr name="inner_circle_color" format="color"/>
         <attr name="left_text" format="string"/>
         <attr name="right_text" format="string"/>
         <attr name="text_size" format="dimension"/>
-        <attr name="circle_size" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="BackForward">
     </declare-styleable>
 </resources>

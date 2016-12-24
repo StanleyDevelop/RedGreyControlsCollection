@@ -54,23 +54,28 @@ public class Switch
         textPaint.setStyle(Paint.Style.FILL);
         circlePaint.setStyle(Paint.Style.STROKE);
         innerCirclePaint.setStyle(Paint.Style.FILL);
-        TypedArray a = context.getTheme().obtainStyledAttributes(
+        TypedArray switchTypedArray = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.Switch,
                 0, 0);
+        TypedArray circlableTypedArray = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.Circlable,
+                0, 0);
         try
         {
-            setLeftText(a.getString(R.styleable.Switch_left_text));
-            setRightText(a.getString(R.styleable.Switch_right_text));
-            setTextSize(a.getDimensionPixelSize(R.styleable.Switch_text_size, 0));
-            setCircleSize(a.getDimensionPixelSize(R.styleable.Switch_circle_size, 0));
-            setTextColor(a.getColor(R.styleable.Switch_text_color, Color.BLACK));
-            setCircleColor(a.getColor(R.styleable.Switch_circle_color, Color.BLACK));
-            setInnerCircleColor(a.getColor(R.styleable.Switch_inner_circle_color, Color.BLACK));
+            setLeftText(switchTypedArray.getString(R.styleable.Switch_left_text));
+            setRightText(switchTypedArray.getString(R.styleable.Switch_right_text));
+            setTextSize(switchTypedArray.getDimensionPixelSize(R.styleable.Switch_text_size, 0));
+            setTextColor(switchTypedArray.getColor(R.styleable.Switch_text_color, Color.BLACK));
+            setInnerCircleColor(switchTypedArray.getColor(R.styleable.Switch_inner_circle_color, Color.BLACK));
+            setCircleColor(circlableTypedArray.getColor(R.styleable.Circlable_circle_color, Color.BLACK));
+            setCircleSize(circlableTypedArray.getDimensionPixelSize(R.styleable.Circlable_circle_size, 0));
         }
         finally
         {
-            a.recycle();
+            switchTypedArray.recycle();
+            circlableTypedArray.recycle();
         }
         recalculate();
         post(new Runnable()

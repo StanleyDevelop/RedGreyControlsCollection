@@ -19,14 +19,14 @@
         <stan.rgcc.demo.ui.views.Switch
             android:id="@+id/switcher_white"
             app:text_color="@color/black"
-            app:circle_color="@color/black"
             app:inner_circle_color="@color/red"
             app:left_text="Да"
             app:right_text="Нет"
             app:text_size="18dp"
             app:circle_size="12dp"
+            app:circle_color="@color/black"
             android:layout_width="wrap_content"
-            android:layout_height="56dp"/>
+            android:layout_height="36dp"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
@@ -42,13 +42,17 @@
         <stan.rgcc.demo.ui.views.Switch
             android:id="@+id/switcher_blue"
             app:text_color="@color/white"
-            app:circle_color="@color/white"
             app:inner_circle_color="@color/white"
             app:left_text="Сегодня"
             app:right_text="Завтра"
             app:text_size="16dp"
             app:circle_size="16dp"
+            app:circle_color="@color/white"
             android:layout_width="wrap_content"
-            android:layout_height="56dp"/>
+            android:layout_height="36dp"/>
     </LinearLayout>
+    <stan.rgcc.demo.ui.views.BackForward
+        app:circle_size="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="256dp"/>
 </LinearLayout>
