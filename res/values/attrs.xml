@@ -12,5 +12,15 @@
         <attr name="text_size" format="dimension"/>
     </declare-styleable>
     <declare-styleable name="BackForward">
+        <attr name="outer_color" format="color"/>
+        <attr name="inner_color" format="color"/>
+        <attr name="ripple_color" format="color"/>
+        <attr name="between_padding" format="dimension"/>
+        <attr name="back_icon" format="reference"/>
+        <attr name="back_icon_tint" format="color"/>
+        <attr name="back_icon_size" format="dimension"/>
+        <attr name="forward_icon" format="reference"/>
+        <attr name="forward_icon_tint" format="color"/>
+        <attr name="forward_icon_size" format="dimension"/>
     </declare-styleable>
 </resources>

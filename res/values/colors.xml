@@ -10,9 +10,10 @@
     <color name="graylight">#EEEEEE</color>
     <color name="red">#F44336</color>
     <color name="blue">#2196F3</color>
+    <color name="blue_trans">#442196F3</color>
     <color name="green">#4CAF50</color>
     <color name="yellow">#FFEB3B</color>
     <color name="orange">#FF9800</color>
     <color name="white">#ffffff</color>
-    <color name="white_trans">#22ffffff</color>
+    <color name="white_trans">#44ffffff</color>
 </resources>

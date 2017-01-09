@@ -35,16 +35,75 @@ public class Switch
     private int rightTextX;
     private int textSize;
     private int circleSize;
+    private int circleStrokeWidth;
     private int innerCircleSize;
     private int maxInnerCircleSize;
 
-    private Side side;
+    private int side;
+    private int oldSide;
 
     private AnimatorSet currentAnimation;
 
     private Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint innerCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private final Animator.AnimatorListener leftToRightProxy = new Animator.AnimatorListener()
+    {
+        @Override
+        public void onAnimationStart(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationEnd(Animator animator)
+        {
+            post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    innerCircleX = rightX;
+                    moveSwitch(0, maxInnerCircleSize, 150, null);
+                }
+            });
+        }
+        @Override
+        public void onAnimationCancel(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationRepeat(Animator animator)
+        {
+        }
+    };
+    private final Animator.AnimatorListener rightToLeftProxy = new Animator.AnimatorListener()
+    {
+        @Override
+        public void onAnimationStart(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationEnd(Animator animator)
+        {
+            post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    innerCircleX = leftX;
+                    moveSwitch(0, maxInnerCircleSize, 150, null);
+                }
+            });
+        }
+        @Override
+        public void onAnimationCancel(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationRepeat(Animator animator)
+        {
+        }
+    };
 
     private ChangeSideListener listener;
 
@@ -53,6 +112,7 @@ public class Switch
         super(context, attrs);
         textPaint.setStyle(Paint.Style.FILL);
         circlePaint.setStyle(Paint.Style.STROKE);
+        circleStrokeWidth = 2;
         innerCirclePaint.setStyle(Paint.Style.FILL);
         TypedArray switchTypedArray = context.getTheme().obtainStyledAttributes(
                 attrs,
@@ -77,40 +137,29 @@ public class Switch
             switchTypedArray.recycle();
             circlableTypedArray.recycle();
         }
+        side = Sides.NOTHING;
+        oldSide = Sides.NOTHING;
         recalculate();
-        post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                setSide(Side.LEFT);
-            }
-        });
     }
     @Override
     protected void onDraw(Canvas canvas)
     {
         int h = getHeight();
         int textY = h - (h-textHeight)/2;
-//        int textY = h - (h-textSize)/2;
         canvas.drawCircle(leftX, h/2, circleSize, circlePaint);
-        canvas.drawCircle(innerCircleX, h/2, innerCircleSize, innerCirclePaint);
+        if(side == Sides.LEFT || side == Sides.RIGHT)
+        {
+            canvas.drawCircle(innerCircleX, h/2, innerCircleSize, innerCirclePaint);
+        }
         canvas.drawText(leftText, leftTextX, textY, textPaint);
         canvas.drawCircle(rightX, h/2, circleSize, circlePaint);
         canvas.drawText(rightText, rightTextX, textY, textPaint);
-
-//        canvas.drawRect(leftTextX, textY - textHeight, leftTextX +leftTextWidth, textY, textPaint);
-
-//        canvas.drawLine(circleSize, h, circleSize + 1, h, circlePaint);
-//        canvas.drawLine(leftTextX, h, leftTextX + 1, h, circlePaint);
-//        canvas.drawLine(leftTextX + leftTextWidth, h, leftTextX + leftTextWidth + 1, h, circlePaint);
-//        canvas.drawLine(leftTextX, h, leftTextX + 1, h, circlePaint);
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-        int width = rightTextX+rightTextWidth - (leftX-circleSize);
-        int height = heightMeasureSpec;
+        int width = rightTextX+rightTextWidth - (leftX-circleSize) + circleStrokeWidth*2;
+        int height = circleSize*2 + circleStrokeWidth*2;
         setMeasuredDimension(width, height);
     }
     @Override
@@ -131,6 +180,11 @@ public class Switch
             }
             case MotionEvent.ACTION_UP:
             {
+                if(listener != null && side != oldSide)
+                {
+                    oldSide = side;
+                    listener.changeSide(side);
+                }
                 break;
             }
         }
@@ -140,13 +194,13 @@ public class Switch
     private void touch(float x, float y)
     {
 //        Log.e(getClass().getName(), "touch " + x + " " + y);
-        if(x < getWidth()/2)
+        if(x < leftWidth + circleSize/2)
         {
-            setSide(Side.LEFT);
+            setSide(Sides.LEFT);
         }
         else
         {
-            setSide(Side.RIGHT);
+            setSide(Sides.RIGHT);
         }
     }
 
@@ -156,82 +210,41 @@ public class Switch
 //        Log.e(getClass().getName(), "innerCircleSize " + innerCircleSize);
         invalidate();
     }
-    public void setSide(Side s)
+    public void setSide(int newSide)
     {
-        if(side == s)
+        if(newSide != Sides.LEFT && newSide != Sides.RIGHT && newSide != Sides.NOTHING)
         {
             return;
         }
-        side = s;
-        if(listener != null)
+        if(side == newSide)
         {
-            listener.changeSide(side);
+            return;
         }
-        if(side == Side.LEFT)
+        if(side == Sides.NOTHING)
         {
-            final int ics = innerCircleSize;
-            moveSwitch(ics, 0, 150, new Animator.AnimatorListener()
+            side = newSide;
+            switch(newSide)
             {
-                @Override
-                public void onAnimationStart(Animator animator)
-                {
-                    innerCircleX = rightX;
-                }
-                @Override
-                public void onAnimationEnd(Animator animator)
-                {
-                    post(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            innerCircleX = leftX;
-                            moveSwitch(0, maxInnerCircleSize, 150, null);
-                        }
-                    });
-                }
-                @Override
-                public void onAnimationCancel(Animator animator)
-                {
-                }
-                @Override
-                public void onAnimationRepeat(Animator animator)
-                {
-                }
-            });
-        }
-        else if(side == Side.RIGHT)
-        {
-            final int ics = innerCircleSize;
-            moveSwitch(ics, 0, 150, new Animator.AnimatorListener()
-            {
-                @Override
-                public void onAnimationStart(Animator animator)
-                {
+                case Sides.LEFT:
                     innerCircleX = leftX;
-                }
-                @Override
-                public void onAnimationEnd(Animator animator)
-                {
-                    post(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            innerCircleX = rightX;
-                            moveSwitch(0, maxInnerCircleSize, 150, null);
-                        }
-                    });
-                }
-                @Override
-                public void onAnimationCancel(Animator animator)
-                {
-                }
-                @Override
-                public void onAnimationRepeat(Animator animator)
-                {
-                }
-            });
+                    break;
+                case Sides.RIGHT:
+                    innerCircleX = rightX;
+                    break;
+            }
+            moveSwitch(0, maxInnerCircleSize, 150, null);
+        }
+        else if(newSide == Sides.LEFT)
+        {
+            side = newSide;
+            innerCircleX = rightX;
+            moveSwitch(innerCircleSize, 0, 150, rightToLeftProxy);
+        }
+        else if(newSide == Sides.RIGHT)
+        {
+            side = newSide;
+            innerCircleX = leftX;
+            moveSwitch(innerCircleSize, 0, 150, leftToRightProxy);
         }
     }
     private void cancelCurrentAnimation()
@@ -255,7 +268,7 @@ public class Switch
         currentAnimation.start();
     }
 
-    public Side getSide()
+    public int getSide()
     {
         return side;
     }
@@ -286,6 +299,7 @@ public class Switch
 
     private void recalculate()
     {
+        circlePaint.setStrokeWidth(circleStrokeWidth);
         leftTextWidth = (int)textPaint.measureText(leftText);
         rightTextWidth = (int)textPaint.measureText(rightText);
         textPaint.setTextSize(textSize);
@@ -300,16 +314,16 @@ public class Switch
         tmp /= 100;
         innerCircleSize = (int)(tmp*80);
         maxInnerCircleSize = innerCircleSize;
-        leftX = circleSize;
+        leftX = circleSize + circleStrokeWidth;
         leftTextX = leftX + circleSize*2;
         leftWidth = leftTextX + leftTextWidth;
-        rightX = leftWidth + circleSize*2;
+        rightX = leftWidth + circleSize*2 + circleStrokeWidth;
         rightTextX = rightX + circleSize*2;
-        if(side == Side.LEFT)
+        if(side == Sides.LEFT)
         {
             innerCircleX = leftX;
         }
-        else if(side == Side.RIGHT)
+        else if(side == Sides.RIGHT)
         {
             innerCircleX = rightX;
         }
@@ -318,9 +332,9 @@ public class Switch
         innerCirclePaint.setColor(innerCircleColor);
     }
 
-    public void setListener(ChangeSideListener listener)
+    public void setListener(ChangeSideListener l)
     {
-        this.listener = listener;
+        listener = l;
     }
 
     public void setTextColor(int tc)
@@ -341,12 +355,12 @@ public class Switch
 
     public interface ChangeSideListener
     {
-        void changeSide(Side newSide);
+        void changeSide(int newSide);
     }
-    public enum Side
+    public interface Sides
     {
-        LEFT,
-        RIGHT,
-        NOTHING,
+        int LEFT = 0;
+        int RIGHT = 1;
+        int NOTHING = -1;
     }
 }
