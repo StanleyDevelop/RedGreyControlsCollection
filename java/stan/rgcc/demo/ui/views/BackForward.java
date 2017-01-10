@@ -91,16 +91,12 @@ public class BackForward
                 attrs,
                 R.styleable.BackForward,
                 0, 0);
-        TypedArray circlableTypedArray = context.getTheme().obtainStyledAttributes(
-                attrs,
-                R.styleable.Circlable,
-                0, 0);
         try
         {
             setOuterColor(backForwardTypedArray.getColor(R.styleable.BackForward_outer_color, 0));
             setInnerColor(backForwardTypedArray.getColor(R.styleable.BackForward_inner_color, 0));
             setRippleColor(backForwardTypedArray.getColor(R.styleable.BackForward_ripple_color, 0));
-            setCircleSize(circlableTypedArray.getDimensionPixelSize(R.styleable.Circlable_circle_size, px(56)));
+            setCircleSize(backForwardTypedArray.getDimensionPixelSize(R.styleable.BackForward_inner_size, px(56)));
             setBackIcon(backForwardTypedArray.getDrawable(R.styleable.BackForward_back_icon));
             setBetweenPadding(backForwardTypedArray.getDimensionPixelSize(R.styleable.BackForward_between_padding, px(56)));
             setBackIconTint(backForwardTypedArray.getColor(R.styleable.BackForward_back_icon_tint, 0));
@@ -112,7 +108,6 @@ public class BackForward
         finally
         {
             backForwardTypedArray.recycle();
-            circlableTypedArray.recycle();
         }
         shadowPaint.setStyle(Paint.Style.FILL);
         rippleAnimation = new AnimatorSet();
@@ -127,64 +122,62 @@ public class BackForward
         });
     }
 
-    private void setRippleColor(int color)
+    public void setRippleColor(int color)
     {
         rippleColor = color;
         recalculate();
     }
-
-    private void setInnerColor(int color)
+    public void setInnerColor(int color)
     {
         innerColor = color;
         recalculate();
     }
-
-    private void setOuterColor(int color)
+    public void setOuterColor(int color)
     {
         outerColor = color;
         recalculate();
     }
-    private void setBetweenPadding(int padding)
+    public void setBetweenPadding(int padding)
     {
         betweenPadding = padding;
         recalculate();
     }
-    private void setForwardIconTint(int color)
+    public void setForwardIconTint(int color)
     {
         rightIconTint = color;
         recalculate();
     }
-    private void setBackIconTint(int color)
+    public void setBackIconTint(int color)
     {
         leftIconTint = color;
         recalculate();
     }
-    private void setForwardIconSize(int forwardIconSize)
+    public void setForwardIconSize(int forwardIconSize)
     {
         rightIconSize = forwardIconSize;
         recalculate();
     }
-    private void setForwardIcon(Drawable drawable)
+    public void setForwardIcon(Drawable drawable)
     {
         rightDrawable = drawable;
         recalculate();
     }
-    private void setBackIconSize(int backIconSize)
+    public void setBackIconSize(int backIconSize)
     {
         leftIconSize = backIconSize;
         recalculate();
     }
-    private void setBackIcon(Drawable drawable)
+    public void setBackIcon(Drawable drawable)
     {
         leftDrawable = drawable;
         recalculate();
     }
-
     public void setCircleSize(int cs)
     {
         circleSize = cs;
         recalculate();
     }
+
     public void setRippleCircleSize(int value)
     {
         rippleCircleSize = value;
@@ -467,11 +460,11 @@ public class BackForward
         outerPaint.setColor(outerColor);
         circlePaint.setColor(innerColor);
         ripplePaint.setColor(rippleColor);
-        Log.e(getClass().getName(), "recalculate"
-                + "\ncircleSize " + circleSize
-                + "\nouterSize " + outerSize
-                + "\nbetweenPadding " + betweenPadding
-        );
+//        Log.e(getClass().getName(), "recalculate"
+//                + "\ncircleSize " + circleSize
+//                + "\nouterSize " + outerSize
+//                + "\nbetweenPadding " + betweenPadding
+//        );
     }
 
     public void setListener(ChangeSideListener l)

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import stan.rgcc.demo.R;
 import stan.rgcc.demo.ui.views.BackForward;
+import stan.rgcc.demo.ui.views.Steps;
 import stan.rgcc.demo.ui.views.Switch;
 
 public class MainActivity
@@ -15,10 +16,11 @@ public class MainActivity
 {
     private TextView switch_white_text;
     private Switch switcher_white;
-    private TextView switch_blue_text;
     private Switch switcher_blue;
     private TextView bckfwd_text;
     private BackForward bckfwd;
+    private TextView steps_white_text;
+    private Steps steps_white;
 
     private final View.OnClickListener clickListener = new View.OnClickListener()
     {
@@ -43,10 +45,11 @@ public class MainActivity
     {
         switch_white_text = findView(R.id.switch_white_text);
         switcher_white = findView(R.id.switcher_white);
-        switch_blue_text = findView(R.id.switch_blue_text);
         switcher_blue = findView(R.id.switcher_blue);
         bckfwd_text = findView(R.id.bckfwd_text);
         bckfwd = findView(R.id.bckfwd);
+        steps_white_text = findView(R.id.steps_white_text);
+        steps_white = findView(R.id.steps_white);
         setClickListener(switcher_white, switcher_blue);
     }
     private void init()
@@ -66,7 +69,6 @@ public class MainActivity
             public void changeSide(int newSide)
             {
                 Log.e(getClass().getName(), "blue side " + newSide);
-                switch_blue_text.setText("side " + newSide);
             }
         });
         bckfwd.setListener(new BackForward.ChangeSideListener()
@@ -76,6 +78,15 @@ public class MainActivity
             {
                 Log.e(getClass().getName(), "BackForward side " + newSide);
                 bckfwd_text.setText("side " + newSide);
+            }
+        });
+        steps_white.setListener(new Steps.ChangeStepListener()
+        {
+            @Override
+            public void changeStep(int newStep)
+            {
+                Log.e(getClass().getName(), "Steps newStep " + newStep);
+                steps_white_text.setText("newStep " + newStep);
             }
         });
     }

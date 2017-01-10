@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -118,10 +117,6 @@ public class Switch
                 attrs,
                 R.styleable.Switch,
                 0, 0);
-        TypedArray circlableTypedArray = context.getTheme().obtainStyledAttributes(
-                attrs,
-                R.styleable.Circlable,
-                0, 0);
         try
         {
             setLeftText(switchTypedArray.getString(R.styleable.Switch_left_text));
@@ -129,13 +124,12 @@ public class Switch
             setTextSize(switchTypedArray.getDimensionPixelSize(R.styleable.Switch_text_size, 0));
             setTextColor(switchTypedArray.getColor(R.styleable.Switch_text_color, Color.BLACK));
             setInnerCircleColor(switchTypedArray.getColor(R.styleable.Switch_inner_circle_color, Color.BLACK));
-            setCircleColor(circlableTypedArray.getColor(R.styleable.Circlable_circle_color, Color.BLACK));
-            setCircleSize(circlableTypedArray.getDimensionPixelSize(R.styleable.Circlable_circle_size, 0));
+            setCircleColor(switchTypedArray.getColor(R.styleable.Switch_outer_circle_color, Color.BLACK));
+            setCircleSize(switchTypedArray.getDimensionPixelSize(R.styleable.Switch_inner_circle_size, 0));
         }
         finally
         {
             switchTypedArray.recycle();
-            circlableTypedArray.recycle();
         }
         side = Sides.NOTHING;
         oldSide = Sides.NOTHING;
@@ -303,10 +297,11 @@ public class Switch
         leftTextWidth = (int)textPaint.measureText(leftText);
         rightTextWidth = (int)textPaint.measureText(rightText);
         textPaint.setTextSize(textSize);
-//        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
         Rect bounds = new Rect();
-        textPaint.getTextBounds(leftText+rightText, 0, (leftText+rightText).length(), bounds);
+//        textPaint.getTextBounds(leftText+rightText, 0, (leftText+rightText).length(), bounds);
+        textPaint.getTextBounds("1", 0, 1, bounds);
         textHeight = bounds.height();
+//        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
 //        textHeight = (int)(fontMetrics.bottom-fontMetrics.top);
 //        textHeight = (int)(fontMetrics.descent - fontMetrics.ascent + fontMetrics.leading);
 //        Log.e(getClass().getName(), "textHeight " + textHeight + " textSize " + textSize + " fontMetrics " + (fontMetrics.bottom-fontMetrics.top));
