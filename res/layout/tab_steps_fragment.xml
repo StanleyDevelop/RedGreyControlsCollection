@@ -29,14 +29,14 @@
     </LinearLayout>
     <HorizontalScrollView
         android:overScrollMode="never"
-        android:background="@color/blue"
         android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <stan.rgcc.demo.ui.views.TabSteps
             android:id="@+id/tab_steps_blue"
+            app:background_color="@color/blue"
             app:tab_text_size="24dp"
-            app:right_icon_size="36dp"
+            app:right_icon_size="48dp"
             app:right_icon="@drawable/ic_keyboard_arrow_left_white_48dp"
             app:current_color="@color/white"
             app:access_color="@color/black"

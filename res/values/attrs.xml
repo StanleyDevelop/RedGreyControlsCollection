@@ -35,6 +35,7 @@
         <attr name="current_step" format="integer"/>
     </declare-styleable>
     <declare-styleable name="TabSteps">
+        <attr name="background_color" format="color"/>
         <attr name="right_icon" format="reference"/>
         <attr name="right_icon_size" format="dimension"/>
         <attr name="tab_text_size" format="dimension"/>

@@ -49,8 +49,8 @@ public class TabStepsFragment
                 tab_steps_text.setText("step " + newStep);
             }
         });
-        tab_steps_blue.setSteps("a", "cd", "ghijkl", "mn", "pq", "r");
-        tab_steps_blue.setLastAccessStep(2);
+        tab_steps_blue.setSteps("a", "cd", "ghijkl", "mn", "pq", "r", "pq", "r");
+        tab_steps_blue.setLastAccessStep(4);
         tab_steps_blue.setCurrentStep(0);
     }
 }
