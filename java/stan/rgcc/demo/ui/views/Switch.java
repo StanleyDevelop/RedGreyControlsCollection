@@ -37,6 +37,7 @@ public class Switch
     private int circleStrokeWidth;
     private int innerCircleSize;
     private int maxInnerCircleSize;
+    private int animateDuration;
 
     private int side;
     private int oldSide;
@@ -62,7 +63,7 @@ public class Switch
                 public void run()
                 {
                     innerCircleX = rightX;
-                    moveSwitch(0, maxInnerCircleSize, 150, null);
+                    moveSwitch(0, maxInnerCircleSize, animateDuration, null);
                 }
             });
         }
@@ -90,7 +91,7 @@ public class Switch
                 public void run()
                 {
                     innerCircleX = leftX;
-                    moveSwitch(0, maxInnerCircleSize, 150, null);
+                    moveSwitch(0, maxInnerCircleSize, animateDuration, null);
                 }
             });
         }
@@ -125,7 +126,8 @@ public class Switch
             setTextColor(switchTypedArray.getColor(R.styleable.Switch_text_color, Color.BLACK));
             setInnerCircleColor(switchTypedArray.getColor(R.styleable.Switch_inner_circle_color, Color.BLACK));
             setCircleColor(switchTypedArray.getColor(R.styleable.Switch_outer_circle_color, Color.BLACK));
-            setCircleSize(switchTypedArray.getDimensionPixelSize(R.styleable.Switch_inner_circle_size, 0));
+            setCircleSize(switchTypedArray.getDimensionPixelSize(R.styleable.Switch_inner_circle_radius, 0));
+            setAnimateDuration(switchTypedArray.getInt(R.styleable.Switch_animate_duration, 50));
         }
         finally
         {
@@ -133,8 +135,30 @@ public class Switch
         }
         side = Sides.NOTHING;
         oldSide = Sides.NOTHING;
+        setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+            }
+        });
         recalculate();
     }
+
+    private void setAnimateDuration(int time)
+    {
+        if(time < 50)
+        {
+            time = 50;
+        }
+        else if(time > 300)
+        {
+            time = 300;
+        }
+        animateDuration = time;
+    }
+
     @Override
     protected void onDraw(Canvas canvas)
     {
@@ -226,19 +250,19 @@ public class Switch
                     innerCircleX = rightX;
                     break;
             }
-            moveSwitch(0, maxInnerCircleSize, 150, null);
+            moveSwitch(0, maxInnerCircleSize, animateDuration, null);
         }
         else if(newSide == Sides.LEFT)
         {
             side = newSide;
             innerCircleX = rightX;
-            moveSwitch(innerCircleSize, 0, 150, rightToLeftProxy);
+            moveSwitch(innerCircleSize, 0, animateDuration, rightToLeftProxy);
         }
         else if(newSide == Sides.RIGHT)
         {
             side = newSide;
             innerCircleX = leftX;
-            moveSwitch(innerCircleSize, 0, 150, leftToRightProxy);
+            moveSwitch(innerCircleSize, 0, animateDuration, leftToRightProxy);
         }
     }
     private void cancelCurrentAnimation()

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/bckfwd_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"/>
+
+        <stan.rgcc.demo.ui.views.BackForward
+            android:id="@+id/bckfwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:back_icon="@drawable/ic_arrow_back_white_48dp"
+            app:back_icon_size="48dp"
+            app:back_icon_tint="@color/white"
+            app:between_padding="48dp"
+            app:forward_icon="@drawable/ic_arrow_forward_white_48dp"
+            app:forward_icon_size="48dp"
+            app:inner_color="@color/red"
+            app:inner_radius="36dp"
+            app:outer_color="@color/graylight"
+            app:ripple_color="@color/white_trans"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <stan.rgcc.demo.ui.views.BackForward
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:back_icon="@drawable/ic_arrow_back_white_48dp"
+            app:back_icon_size="24dp"
+            app:back_icon_tint="@color/white"
+            app:between_padding="6dp"
+            app:forward_icon="@drawable/ic_arrow_forward_white_48dp"
+            app:forward_icon_size="36dp"
+            app:forward_icon_tint="@color/blue"
+            app:inner_color="@color/blue_trans"
+            app:inner_radius="24dp"
+            app:outer_color="@color/white"
+            app:ripple_color="@color/blue_trans"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -68,7 +68,7 @@ public class Steps
                 cStep = 0;
             }
             currentStep = cStep;
-            setCircleSize(stepsTypedArray.getDimensionPixelSize(R.styleable.Steps_step_circle_size, px(12)));
+            setCircleSize(stepsTypedArray.getDimensionPixelSize(R.styleable.Steps_step_circle_radius, px(12)));
             setTextSize(stepsTypedArray.getDimensionPixelSize(R.styleable.Steps_step_text_size, px(6)));
             setBetweenPadding(stepsTypedArray.getDimensionPixelSize(R.styleable.Steps_between_steps_padding, px(6)));
             setTextColor(stepsTypedArray.getColor(R.styleable.Steps_step_text_color, Color.BLACK));

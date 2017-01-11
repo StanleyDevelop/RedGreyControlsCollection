@@ -1,166 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/black"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/switch_white_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"/>
-
-        <stan.rgcc.demo.ui.views.Switch
-            android:id="@+id/switcher_white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:inner_circle_color="@color/red"
-            app:inner_circle_size="12dp"
-            app:left_text="Само собой"
-            app:outer_circle_color="@color/black"
-            app:right_text="Нет"
-            app:text_color="@color/black"
-            app:text_size="18dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/blue"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <stan.rgcc.demo.ui.views.Switch
-            android:id="@+id/switcher_blue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:inner_circle_color="@color/white"
-            app:inner_circle_size="16dp"
-            app:left_text="Сегодня"
-            app:outer_circle_color="@color/white"
-            app:right_text="Завтра"
-            app:text_color="@color/white"
-            app:text_size="16dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/bckfwd_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"/>
-
-        <stan.rgcc.demo.ui.views.BackForward
-            android:id="@+id/bckfwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:back_icon="@drawable/ic_arrow_back_white_48dp"
-            app:back_icon_size="48dp"
-            app:back_icon_tint="@color/white"
-            app:between_padding="48dp"
-            app:forward_icon="@drawable/ic_arrow_forward_white_48dp"
-            app:forward_icon_size="48dp"
-            app:inner_color="@color/red"
-            app:inner_size="36dp"
-            app:outer_color="@color/graylight"
-            app:ripple_color="@color/white_trans"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/blue"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <stan.rgcc.demo.ui.views.BackForward
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:back_icon="@drawable/ic_arrow_back_white_48dp"
-            app:back_icon_size="24dp"
-            app:back_icon_tint="@color/white"
-            app:between_padding="6dp"
-            app:forward_icon="@drawable/ic_arrow_forward_white_48dp"
-            app:forward_icon_size="36dp"
-            app:forward_icon_tint="@color/blue"
-            app:inner_color="@color/blue_trans"
-            app:inner_size="24dp"
-            app:outer_color="@color/white"
-            app:ripple_color="@color/blue_trans"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <HorizontalScrollView
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@color/white"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/steps_white_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/switchs"
+                android:text="switchs"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"/>
-
-            <stan.rgcc.demo.ui.views.Steps
-                android:id="@+id/steps_white"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/bckfwds"
+                android:text="bckfwds"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:between_steps_padding="12dp"
-                app:current_step_circle_color="@color/red"
-                app:step_circle_color="@color/graylight"
-                app:step_circle_size="16dp"
-                app:step_text_color="@color/white"
-                app:step_text_size="24dp"
-                app:steps_count="4"/>
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/steps"
+                android:text="steps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/tabsteps"
+                android:text="tabsteps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/blue"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <stan.rgcc.demo.ui.views.Steps
-                android:id="@+id/steps_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:between_steps_padding="12dp"
-                app:current_step_circle_color="@color/blue_trans"
-                app:step_circle_color="@color/white"
-                app:step_circle_size="22dp"
-                app:step_text_color="@color/blue"
-                app:step_text_size="24dp"
-                app:steps_count="3"
-                app:steps_orientation="1"/>
-        </LinearLayout>
-    </LinearLayout>
+    </HorizontalScrollView>
+    <FrameLayout
+        android:id="@+id/main_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

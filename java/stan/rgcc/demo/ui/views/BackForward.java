@@ -49,8 +49,6 @@ public class BackForward
 
     private float density;
     private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint iconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint shadowPaint = new Paint();
     private Paint outerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint ripplePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -67,6 +65,26 @@ public class BackForward
         public void onAnimationEnd(Animator animator)
         {
             rippleOut();
+        }
+        @Override
+        public void onAnimationCancel(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationRepeat(Animator animator)
+        {
+        }
+    };
+    private final Animator.AnimatorListener rippleOutProxy = new Animator.AnimatorListener()
+    {
+        @Override
+        public void onAnimationStart(Animator animator)
+        {
+        }
+        @Override
+        public void onAnimationEnd(Animator animator)
+        {
+            drawRipple = false;
         }
         @Override
         public void onAnimationCancel(Animator animator)
@@ -96,7 +114,7 @@ public class BackForward
             setOuterColor(backForwardTypedArray.getColor(R.styleable.BackForward_outer_color, 0));
             setInnerColor(backForwardTypedArray.getColor(R.styleable.BackForward_inner_color, 0));
             setRippleColor(backForwardTypedArray.getColor(R.styleable.BackForward_ripple_color, 0));
-            setCircleSize(backForwardTypedArray.getDimensionPixelSize(R.styleable.BackForward_inner_size, px(56)));
+            setCircleSize(backForwardTypedArray.getDimensionPixelSize(R.styleable.BackForward_inner_radius, px(56)));
             setBackIcon(backForwardTypedArray.getDrawable(R.styleable.BackForward_back_icon));
             setBetweenPadding(backForwardTypedArray.getDimensionPixelSize(R.styleable.BackForward_between_padding, px(56)));
             setBackIconTint(backForwardTypedArray.getColor(R.styleable.BackForward_back_icon_tint, 0));
@@ -109,7 +127,6 @@ public class BackForward
         {
             backForwardTypedArray.recycle();
         }
-        shadowPaint.setStyle(Paint.Style.FILL);
         rippleAnimation = new AnimatorSet();
         interpolator = new AccelerateDecelerateInterpolator();
         side = Sides.NOTHING;
@@ -350,11 +367,18 @@ public class BackForward
                 default:
                     return;
             }
-            rippleAnimation.play(ObjectAnimator.ofFloat(this, "rippleX", rippleX, sideX))
-                           .with(ObjectAnimator.ofFloat(this, "rippleY", rippleY, centerY));
             double duration = 200;
             duration *= circleSize-rippleCircleSize;
             duration /= circleSize;
+            if(duration < 50)
+            {
+                rippleX = sideX;
+                rippleY = centerY;
+                rippleOut();
+                return;
+            }
+            rippleAnimation.play(ObjectAnimator.ofFloat(this, "rippleX", rippleX, sideX))
+                           .with(ObjectAnimator.ofFloat(this, "rippleY", rippleY, centerY));
             rippleAnimation.setDuration((long)duration);
             rippleAnimation.start();
             rippleAnimation.addListener(rippleProxy);
@@ -382,38 +406,17 @@ public class BackForward
         double duration = 200;
         duration *= rippleCircleSize;
         duration /= circleSize;
-        if(duration <= 0)
+        if(duration < 50)
         {
             rippleCircleSize = 0;
             drawRipple = false;
+            invalidate();
             return;
         }
         rippleAnimation = new AnimatorSet();
         rippleAnimation.play(ObjectAnimator.ofInt(this, "rippleCircleSize", rippleCircleSize, 0));
         rippleAnimation.setDuration((long)duration);
-        rippleAnimation.addListener(new Animator.AnimatorListener()
-        {
-            @Override
-            public void onAnimationStart(Animator animator)
-            {
-
-            }
-            @Override
-            public void onAnimationEnd(Animator animator)
-            {
-                drawRipple = false;
-            }
-            @Override
-            public void onAnimationCancel(Animator animator)
-            {
-
-            }
-            @Override
-            public void onAnimationRepeat(Animator animator)
-            {
-
-            }
-        });
+        rippleAnimation.addListener(rippleOutProxy);
         rippleAnimation.start();
     }
 

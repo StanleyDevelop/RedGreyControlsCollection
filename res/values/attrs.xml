@@ -3,16 +3,17 @@
     <declare-styleable name="Switch">
         <attr name="text_color" format="color"/>
         <attr name="inner_circle_color" format="color"/>
-        <attr name="inner_circle_size" format="dimension"/>
+        <attr name="inner_circle_radius" format="dimension"/>
         <attr name="outer_circle_color" format="color"/>
         <attr name="left_text" format="string"/>
         <attr name="right_text" format="string"/>
         <attr name="text_size" format="dimension"/>
+        <attr name="animate_duration" format="integer"/>
     </declare-styleable>
     <declare-styleable name="BackForward">
         <attr name="outer_color" format="color"/>
         <attr name="inner_color" format="color"/>
-        <attr name="inner_size" format="dimension"/>
+        <attr name="inner_radius" format="dimension"/>
         <attr name="ripple_color" format="color"/>
         <attr name="between_padding" format="dimension"/>
         <attr name="back_icon" format="reference"/>
@@ -28,9 +29,18 @@
         <attr name="step_text_color" format="color"/>
         <attr name="step_circle_color" format="color"/>
         <attr name="current_step_circle_color" format="color"/>
-        <attr name="step_circle_size" format="dimension"/>
+        <attr name="step_circle_radius" format="dimension"/>
         <attr name="step_text_size" format="dimension"/>
         <attr name="between_steps_padding" format="dimension"/>
         <attr name="current_step" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="TabSteps">
+        <attr name="right_icon" format="reference"/>
+        <attr name="right_icon_size" format="dimension"/>
+        <attr name="tab_text_size" format="dimension"/>
+        <attr name="access_color" format="dimension"/>
+        <attr name="current_color" format="dimension"/>
+        <attr name="denied_color" format="dimension"/>
+        <attr name="animate_time" format="integer"/>
     </declare-styleable>
 </resources>

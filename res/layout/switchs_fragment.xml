@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/switch_white_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"/>
+
+        <stan.rgcc.demo.ui.views.Switch
+            android:id="@+id/switcher_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:animate_duration="50"
+            app:inner_circle_color="@color/red"
+            app:inner_circle_radius="12dp"
+            app:left_text="Само собой"
+            app:outer_circle_color="@color/black"
+            app:right_text="Нет"
+            app:text_color="@color/black"
+            app:text_size="18dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <stan.rgcc.demo.ui.views.Switch
+            android:id="@+id/switcher_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:animate_duration="300"
+            app:inner_circle_color="@color/white"
+            app:inner_circle_radius="24dp"
+            app:left_text="Сегодня"
+            app:outer_circle_color="@color/white"
+            app:right_text="Завтра"
+            app:text_color="@color/white"
+            app:text_size="12dp"/>
+    </LinearLayout>
+</LinearLayout>
