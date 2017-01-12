@@ -22,7 +22,7 @@
             android:id="@+id/switcher_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:animate_duration="50"
+            app:animate_duration="150"
             app:inner_circle_color="@color/red"
             app:inner_circle_radius="12dp"
             app:left_text="Само собой"

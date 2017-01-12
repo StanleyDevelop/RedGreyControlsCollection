@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 
 import stan.rgcc.demo.R;
 
@@ -27,6 +29,8 @@ public class Steps
     private int circleColor;
     private int currentCircleColor;
     private int orientation;
+    private Interpolator interpolator;
+    private int animationTime;
 
     private int centerX;
     private int centerY;
@@ -47,7 +51,6 @@ public class Steps
     private int currentStep;
     private int oldStep;
     private AnimatorSet stepsAnimation;
-    private final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
 
     private ChangeStepListener listener;
 
@@ -79,6 +82,9 @@ public class Steps
         {
             stepsTypedArray.recycle();
         }
+//        interpolator = new AccelerateDecelerateInterpolator();
+        interpolator = new BounceInterpolator();
+        setAnimationTime(300);
         setOnClickListener(new OnClickListener()
         {
             @Override
@@ -88,7 +94,28 @@ public class Steps
         });
     }
 
-    private void setStepsOrientation(int o)
+    public void setAnimationTime(int time)
+    {
+        if(time < 50)
+        {
+            time = 50;
+        }
+        else if(time > 600)
+        {
+            time = 600;
+        }
+        animationTime = time*2;
+        recalculate();
+    }
+    public void setInterpolator(Interpolator i)
+    {
+        if(i != null)
+        {
+            interpolator = i;
+            recalculate();
+        }
+    }
+    public void setStepsOrientation(int o)
     {
         if(o != 0 && o != 1)
         {
@@ -96,23 +123,22 @@ public class Steps
         }
         orientation = o;
     }
-
-    private void setCurrentCircleColor(int color)
+    public void setCurrentCircleColor(int color)
     {
         currentCircleColor = color;
         recalculate();
     }
-    private void setCircleColor(int color)
+    public void setCircleColor(int color)
     {
         circleColor = color;
         recalculate();
     }
-    private void setTextColor(int color)
+    public void setTextColor(int color)
     {
         textColor = color;
         recalculate();
     }
-    private void setCurrentStep(int cStep)
+    public void setCurrentStep(int cStep)
     {
         if(cStep == currentStep)
         {
@@ -168,7 +194,7 @@ public class Steps
         startAnimateX = currentStepX;
         newStepX = (circleSize*2+betweenPadding)*newStep + circleSize;
         stepsAnimation.play(ObjectAnimator.ofInt(this, "currentStepX", startAnimateX, newStepX));
-        stepsAnimation.setDuration(300);
+        stepsAnimation.setDuration(animationTime);
         stepsAnimation.start();
     }
     private void animateStepsVertical(int newStep)
@@ -180,7 +206,7 @@ public class Steps
         startAnimateY = currentStepY;
         newStepY = (circleSize*2+betweenPadding)*newStep + circleSize;
         stepsAnimation.play(ObjectAnimator.ofInt(this, "currentStepY", startAnimateY, newStepY));
-        stepsAnimation.setDuration(300);
+        stepsAnimation.setDuration(animationTime);
         stepsAnimation.start();
     }
 

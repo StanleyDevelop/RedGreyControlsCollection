@@ -17,7 +17,19 @@ public class TabStepsFragment
     @Override
     protected View.OnClickListener setClickListener()
     {
-        return null;
+        return new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                switch(view.getId())
+                {
+                    case R.id.step1:
+                        tab_steps.setCurrentStep(1);
+                        break;
+                }
+            }
+        };
     }
 
     @Override
@@ -32,6 +44,7 @@ public class TabStepsFragment
         tab_steps_text = findView(R.id.tab_steps_text);
         tab_steps = findView(R.id.tab_steps);
         tab_steps_blue = findView(R.id.tab_steps_blue);
+        setClickListener(findView(R.id.step1));
     }
 
     @Override

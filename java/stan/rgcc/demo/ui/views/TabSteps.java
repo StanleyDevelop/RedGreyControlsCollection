@@ -16,7 +16,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 import stan.rgcc.demo.R;
@@ -35,6 +40,7 @@ public class TabSteps
     private int lastAccessStep;
     private int currentStep;
     private int animateTime;
+    private Interpolator interpolator;
 
     private int allWidth;
     private int minHeight;
@@ -66,7 +72,6 @@ public class TabSteps
     private AnimatorSet rippleAnimation = new AnimatorSet();
     private AnimatorSet stepsAnimation = new AnimatorSet();
 //    private final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
-    private final Interpolator interpolator = new AccelerateDecelerateInterpolator();
     private final Animator.AnimatorListener rippleProxy = new Animator.AnimatorListener()
     {
         @Override
@@ -111,6 +116,12 @@ public class TabSteps
         {
             tabStepsTypedArray.recycle();
         }
+        interpolator = new AccelerateDecelerateInterpolator();
+//        interpolator = new AnticipateOvershootInterpolator();
+//        interpolator = new AccelerateInterpolator();
+//        interpolator = new BounceInterpolator();
+//        interpolator = new DecelerateInterpolator();
+        currentStep = -1;
 //        setOnClickListener(new OnClickListener()
 //        {
 //            @Override
@@ -120,13 +131,20 @@ public class TabSteps
 //        });
     }
 
-    private void setBackgroundTabColor(int color)
+    public void setInterpolator(Interpolator i)
+    {
+        if(i != null)
+        {
+            interpolator = i;
+            recalculate();
+        }
+    }
+    public void setBackgroundTabColor(int color)
     {
         backgroundColor = color;
         recalculate();
     }
-
-    private void setAnimateTime(int time)
+    public void setAnimateTime(int time)
     {
         if(time < 50)
         {
@@ -138,7 +156,6 @@ public class TabSteps
         }
         animateTime = time;
     }
-
     public void setCurrentColor(int color)
     {
         currentColor = color;
@@ -206,8 +223,14 @@ public class TabSteps
         {
             step = 0;
         }
-        animateSteps(step);
+        animateSteps(step, animateTime);
         currentStep = step;
+        recalculate();
+    }
+    public void setOldStep()
+    {
+        currentStep = oldStep;
+        animateSteps(currentStep, 150);
         recalculate();
     }
 
@@ -242,7 +265,7 @@ public class TabSteps
         currentSublineLength = value;
         invalidate();
     }
-    private void animateSteps(int step)
+    private void animateSteps(int step, int duration)
     {
         stepsAnimation.removeAllListeners();
         stepsAnimation.cancel();
@@ -255,7 +278,7 @@ public class TabSteps
         }
         stepsAnimation.play(ObjectAnimator.ofInt(this, "currentSublineX", currentSublineX, len))
         .with(ObjectAnimator.ofInt(this, "currentSublineLength", currentSublineLength, stepLength(step)));
-        stepsAnimation.setDuration(animateTime);
+        stepsAnimation.setDuration(duration);
         stepsAnimation.start();
     }
 
@@ -437,14 +460,17 @@ public class TabSteps
                 if(y < 0 || y > getHeight() || x < 0 || x > lastAccessStepX + stepLength(lastAccessStep))
                 {
                     int old = currentStep;
-                    setCurrentStep(oldStep);
+//                    setCurrentStep(oldStep);
+                    setOldStep();
                     if(old == oldStep)
                     {
                         rippleOut();
                     }
                     else
                     {
-                        animateRipple(currentX + stepLength(currentStep)/2, centerY, currentStep, 150, rippleProxy);
+                        drawRipple = false;
+                        rippleCircleSize = 0;
+//                        animateRipple(currentX + stepLength(currentStep)/2, centerY, currentStep, 150, rippleProxy);
                     }
                     dispatch = false;
                     break;
@@ -454,8 +480,11 @@ public class TabSteps
             }
             case MotionEvent.ACTION_CANCEL:
             {
-                setCurrentStep(oldStep);
-                animateRipple(currentX + stepLength(currentStep)/2, centerY, currentStep, 150, rippleProxy);
+//                setCurrentStep(oldStep);
+                setOldStep();
+                drawRipple = false;
+                rippleCircleSize = 0;
+//                animateRipple(currentX + stepLength(currentStep)/2, centerY, currentStep, 150, rippleProxy);
                 dispatch = false;
                 break;
             }
@@ -610,11 +639,11 @@ public class TabSteps
             x += tabMargin*2 + (int)tabPaint.measureText(steps[i]) + tabMargin*2 + iconLength;
         }
         currentX = x;
-        currentSublineX = x;
+//        currentSublineX = x;
         currentLength = stepLength(currentStep);
-        currentSublineLength = currentLength;
+//        currentSublineLength = currentLength;
         sublineHeight = px(4);
-        invalidate();
+//        invalidate();
     }
     private int stepLength(int i)
     {

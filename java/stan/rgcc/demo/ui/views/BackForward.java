@@ -5,19 +5,16 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 
 import stan.rgcc.demo.R;
 
@@ -53,7 +50,7 @@ public class BackForward
     private Paint ripplePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private AnimatorSet rippleAnimation;
-    private AccelerateDecelerateInterpolator interpolator;
+    private Interpolator interpolator;
 
     private final Animator.AnimatorListener rippleProxy = new Animator.AnimatorListener()
     {
@@ -129,6 +126,7 @@ public class BackForward
         }
         rippleAnimation = new AnimatorSet();
         interpolator = new AccelerateDecelerateInterpolator();
+//        interpolator = new BounceInterpolator();
         side = Sides.NOTHING;
         setOnClickListener(new OnClickListener()
         {

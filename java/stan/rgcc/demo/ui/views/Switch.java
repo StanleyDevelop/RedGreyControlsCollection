@@ -12,6 +12,8 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 
 import stan.rgcc.demo.R;
 
@@ -38,6 +40,7 @@ public class Switch
     private int innerCircleSize;
     private int maxInnerCircleSize;
     private int animateDuration;
+    private Interpolator interpolator;
 
     private int side;
     private int oldSide;
@@ -133,6 +136,7 @@ public class Switch
         {
             switchTypedArray.recycle();
         }
+        interpolator = new AccelerateDecelerateInterpolator();
         side = Sides.NOTHING;
         oldSide = Sides.NOTHING;
         setOnClickListener(new OnClickListener()
@@ -269,6 +273,7 @@ public class Switch
     {
         if(currentAnimation != null)
         {
+            currentAnimation.removeAllListeners();
             currentAnimation.cancel();
             currentAnimation = null;
         }
@@ -279,6 +284,7 @@ public class Switch
         currentAnimation = new AnimatorSet();
         currentAnimation.play(ObjectAnimator.ofInt(this, "innerCircleSize", start, end));
         currentAnimation.setDuration(duration);
+        currentAnimation.setInterpolator(interpolator);
         if(listener != null)
         {
             currentAnimation.addListener(listener);
@@ -370,6 +376,15 @@ public class Switch
     {
         innerCircleColor = cc;
         recalculate();
+    }
+
+    public void setInterpolator(Interpolator i)
+    {
+        if(i != null)
+        {
+            interpolator = i;
+            recalculate();
+        }
     }
 
     public interface ChangeSideListener
