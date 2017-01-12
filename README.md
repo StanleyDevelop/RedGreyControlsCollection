@@ -3,6 +3,10 @@
 # RedGreyControlsCollection
 RedGrey design controls collection
 
+## Samples
+
+<img src="media/switches_sample.gif" width="179" height="317" /> 
+
 # Build information
 ## defaultConfig
 	applicationId "stan.rgcc.demo"
