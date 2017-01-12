@@ -5,9 +5,13 @@ RedGrey design controls collection
 
 ## Samples
 
-- [Switches](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/Switch.java) - Switches
+- [Switch](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/Switch.java)
 
-<img src="media/switches_sample.gif" width="179" height="317" /> 
+<img src="media/switches_sample.gif" width="179" height="317" />
+
+- [BackForward](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/BackForward.java)
+
+<img src="media/backforward_sample.gif" width="179" height="317" />
 
 # Build information
 ## defaultConfig
