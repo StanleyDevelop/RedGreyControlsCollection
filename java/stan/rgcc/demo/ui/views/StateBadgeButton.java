@@ -277,7 +277,7 @@ public class StateBadgeButton
         if(textWidth > width)
         {
             text += "...";
-            while(textWidth > width)
+            while(textWidth > width - getPaddingRight() - getPaddingLeft())
             {
                 text = text.substring(0, text.length()-4)+"...";
                 textWidth = (int)buttonPaint.measureText(text);
@@ -300,12 +300,30 @@ public class StateBadgeButton
                 height = heightSize;
             }
         }
-        width += getPaddingRight();
-        width += getPaddingLeft();
-        height += getPaddingTop();
-        height += getPaddingBottom();
-        centerX = width/2;
-        centerY = height/2;
+        if(widthMode != MeasureSpec.EXACTLY)
+        {
+            centerX = width/2;
+            width += getPaddingRight();
+            width += getPaddingLeft();
+            centerX += getPaddingLeft();
+        }
+        else
+        {
+            centerX = (width-getPaddingLeft()-getPaddingRight())/2;
+            centerX += getPaddingLeft();
+        }
+        if(heightMode != MeasureSpec.EXACTLY)
+        {
+            centerY = height/2;
+            height += getPaddingTop();
+            height += getPaddingBottom();
+            centerY += getPaddingTop();
+        }
+        else
+        {
+            centerY = (height-getPaddingTop()-getPaddingBottom())/2;
+            centerY += getPaddingTop();
+        }
         badgeX = width-badgeSize-getPaddingRight();
         badgeY = badgeSize+getPaddingTop();
         maxRippleCircleSize = (int)Math.sqrt(width*width + height*height);

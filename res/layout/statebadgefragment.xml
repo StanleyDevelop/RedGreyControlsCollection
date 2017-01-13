@@ -11,7 +11,10 @@
         android:layout_height="wrap_content">
         <stan.rgcc.demo.ui.views.StateBadgeButton
             android:id="@+id/statebadge"
-            android:padding="16dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
             app:button_icon="@drawable/ic_sync_white_48dp"
             app:button_icon_size="48dp"
             app:button_text="sync12345678990"
@@ -22,7 +25,7 @@
             app:badge_color="@color/blue"
             app:badge_text_color="@color/white"
             app:badge_text_size="24dp"
-            android:layout_width="96dp"
+            android:layout_width="128dp"
             android:layout_height="96dp"/>
         <Button
             android:id="@+id/badgeup"
@@ -42,22 +45,59 @@
     </LinearLayout>
     <LinearLayout
         android:background="@color/blue"
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <stan.rgcc.demo.ui.views.StateBadgeButton
             android:id="@+id/car"
-            android:padding="8dp"
+            android:paddingRight="8dp"
+            android:paddingLeft="24dp"
+            android:paddingBottom="16dp"
+            android:paddingTop="36dp"
             app:button_icon="@drawable/ic_directions_car_white_48dp"
             app:button_icon_size="24dp"
             app:button_text="car"
             app:button_text_size="12dp"
             app:color_on="@color/white"
-            app:color_off="@color/black"
+            app:color_off="@color/bluedark"
             app:badge_radius="18dp"
             app:badge_color="@color/blue"
             app:badge_text_color="@color/white"
             app:badge_text_size="24dp"
-            android:layout_width="128dp"
-            android:layout_height="96dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <stan.rgcc.demo.ui.views.StateBadgeButton
+            android:paddingLeft="8dp"
+            android:paddingRight="24dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="36dp"
+            app:button_icon="@drawable/ic_directions_car_white_48dp"
+            app:button_icon_size="24dp"
+            app:button_text="car"
+            app:button_text_size="12dp"
+            app:color_on="@color/white"
+            app:color_off="@color/bluedark"
+            app:badge_radius="18dp"
+            app:badge_color="@color/blue"
+            app:badge_text_color="@color/white"
+            app:badge_text_size="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <stan.rgcc.demo.ui.views.StateBadgeButton
+            android:padding="8dp"
+            app:button_icon="@drawable/ic_directions_car_white_48dp"
+            app:button_icon_size="36dp"
+            app:button_text="car"
+            app:button_text_size="36dp"
+            app:color_on="@color/white"
+            app:color_off="@color/bluedark"
+            app:badge_radius="18dp"
+            app:badge_color="@color/blue"
+            app:badge_text_color="@color/white"
+            app:badge_text_size="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

@@ -12,8 +12,6 @@ public class StateBadgeFragment
     private StateBadgeButton car;
 
     private int count;
-    private boolean state;
-    private boolean carState;
 
     @Override
     protected View.OnClickListener setClickListener()

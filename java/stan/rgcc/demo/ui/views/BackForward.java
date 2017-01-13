@@ -126,7 +126,6 @@ public class BackForward
         }
         rippleAnimation = new AnimatorSet();
         interpolator = new AccelerateDecelerateInterpolator();
-//        interpolator = new BounceInterpolator();
         side = Sides.NOTHING;
         setOnClickListener(new OnClickListener()
         {
@@ -229,11 +228,17 @@ public class BackForward
     }
 
     @Override
+    protected void onAttachedToWindow()
+    {
+        super.onAttachedToWindow();
+        drawRipple = false;
+        rippleCircleSize = 0;
+        invalidate();
+    }
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-//        int width = circleSize*6;
         int width = outerSize*4 + betweenPadding;
-//        int height = heightMeasureSpec;
         int height = outerSize*2;
         setMeasuredDimension(width, height);
     }
@@ -247,7 +252,6 @@ public class BackForward
         {
             case MotionEvent.ACTION_DOWN:
             {
-//                Log.e(getClass().getName(), "onTouchEvent " + x + " " + y + " MotionEvent ACTION_DOWN");
                 if(y > centerY - circleSize && y < centerY + circleSize)
                 {
                     if(x > leftX - circleSize && x < leftX + circleSize)
@@ -273,7 +277,6 @@ public class BackForward
             }
             case MotionEvent.ACTION_MOVE:
             {
-//                Log.e(getClass().getName(), "onTouchEvent " + x + " " + y + " MotionEvent ACTION_MOVE");
                 switch(side)
                 {
                     case Sides.BACK:
@@ -295,7 +298,6 @@ public class BackForward
             }
             case MotionEvent.ACTION_UP:
             {
-//                Log.e(getClass().getName(), "onTouchEvent " + x + " " + y + " MotionEvent ACTION_UP");
                 switch(side)
                 {
                     case Sides.BACK:
@@ -322,9 +324,7 @@ public class BackForward
             default:
                 return;
         }
-        Log.e(getClass().getName(), "touchDown " + x + " " + y + " side " + side + " sideX " + sideX);
         rippleCircleStartSize = (int)Math.sqrt((sideX-x)*(sideX-x)+(centerY-y)*(centerY-y));
-//        Log.e(getClass().getName(), "rippleCircleStartSize " + rippleCircleStartSize);
         rippleAnimation.removeAllListeners();
         rippleAnimation.cancel();
         rippleAnimation = new AnimatorSet();
@@ -337,7 +337,6 @@ public class BackForward
     }
     private void touchUp(float x, float y)
     {
-        Log.e(getClass().getName(), "touchUp " + x + " " + y + " side " + side);
         if(rippleAnimation.isStarted())
         {
             rippleAnimation.removeAllListeners();
