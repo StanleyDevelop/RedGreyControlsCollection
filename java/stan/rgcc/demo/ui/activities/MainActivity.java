@@ -7,6 +7,7 @@ import android.view.View;
 
 import stan.rgcc.demo.R;
 import stan.rgcc.demo.ui.fragments.BackForwardsFragment;
+import stan.rgcc.demo.ui.fragments.StateBadgeFragment;
 import stan.rgcc.demo.ui.fragments.StepsFragment;
 import stan.rgcc.demo.ui.fragments.SwitchsFragment;
 import stan.rgcc.demo.ui.fragments.TabStepsFragment;
@@ -18,6 +19,7 @@ public class MainActivity
     private final Fragment bckfwdFragment = new BackForwardsFragment();
     private final Fragment stepsFragment = new StepsFragment();
     private final Fragment tabStepsFragment = new TabStepsFragment();
+    private final Fragment statebadgeFragment = new StateBadgeFragment();
     private Fragment currentFragment;
 
     private final View.OnClickListener clickListener = new View.OnClickListener()
@@ -43,6 +45,10 @@ public class MainActivity
                     currentFragment = tabStepsFragment;
                     replaceFragment();
                     break;
+                case R.id.statebadge:
+                    currentFragment = statebadgeFragment;
+                    replaceFragment();
+                    break;
             }
         }
     };
@@ -58,12 +64,16 @@ public class MainActivity
 
     private void initViews()
     {
-        setClickListener(findViewById(R.id.switchs), findViewById(R.id.bckfwds), findViewById(R.id.steps), findViewById(R.id.tabsteps));
+        setClickListener(findViewById(R.id.switchs)
+                ,findViewById(R.id.bckfwds)
+                ,findViewById(R.id.steps)
+                ,findViewById(R.id.tabsteps)
+                ,findViewById(R.id.statebadge));
     }
 
     private void init()
     {
-        currentFragment = tabStepsFragment;
+        currentFragment = statebadgeFragment;
         replaceFragment();
     }
 

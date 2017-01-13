@@ -16,12 +16,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.AnticipateOvershootInterpolator;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 import stan.rgcc.demo.R;
@@ -209,12 +203,13 @@ public class TabSteps
         lastAccessStep = step;
         recalculate();
     }
-    public void setCurrentStep(int step)
+    public void setStep(int step)
     {
         if(step == currentStep)
         {
             return;
         }
+        drawRipple = false;
         if(step > lastAccessStep)
         {
             step = lastAccessStep;
@@ -222,6 +217,16 @@ public class TabSteps
         else if(step < 0)
         {
             step = 0;
+        }
+        animateSteps(step, animateTime);
+        currentStep = step;
+        recalculate();
+    }
+    private void setCurrentStep(int step)
+    {
+        if(step == currentStep)
+        {
+            return;
         }
         animateSteps(step, animateTime);
         currentStep = step;

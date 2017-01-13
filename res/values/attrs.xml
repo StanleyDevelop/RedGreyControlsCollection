@@ -39,9 +39,22 @@
         <attr name="right_icon" format="reference"/>
         <attr name="right_icon_size" format="dimension"/>
         <attr name="tab_text_size" format="dimension"/>
-        <attr name="access_color" format="dimension"/>
-        <attr name="current_color" format="dimension"/>
-        <attr name="denied_color" format="dimension"/>
+        <attr name="access_color" format="color"/>
+        <attr name="current_color" format="color"/>
+        <attr name="denied_color" format="color"/>
         <attr name="animate_time" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="StateBadgeButton">
+        <attr name="button_icon" format="reference"/>
+        <attr name="button_icon_size" format="dimension"/>
+        <attr name="button_text" format="string"/>
+        <attr name="button_text_size" format="dimension"/>
+        <attr name="button_state" format="integer"/>
+        <attr name="color_on" format="color"/>
+        <attr name="color_off" format="color"/>
+        <attr name="badge_radius" format="dimension"/>
+        <attr name="badge_color" format="color"/>
+        <attr name="badge_text_color" format="color"/>
+        <attr name="badge_text_size" format="dimension"/>
     </declare-styleable>
 </resources>

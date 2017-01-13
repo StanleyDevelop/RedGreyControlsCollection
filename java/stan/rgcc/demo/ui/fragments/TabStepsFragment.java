@@ -25,7 +25,7 @@ public class TabStepsFragment
                 switch(view.getId())
                 {
                     case R.id.step1:
-                        tab_steps.setCurrentStep(1);
+                        tab_steps.setStep(1);
                         break;
                 }
             }
@@ -52,7 +52,7 @@ public class TabStepsFragment
     {
         tab_steps.setSteps("Begin", "Main", "Other", "End");
         tab_steps.setLastAccessStep(2);
-        tab_steps.setCurrentStep(1);
+        tab_steps.setStep(1);
         tab_steps.setListener(new TabSteps.ChangeStepListener()
         {
             @Override
@@ -64,6 +64,6 @@ public class TabStepsFragment
         });
         tab_steps_blue.setSteps("a", "cd", "ghijkl", "mn", "pq", "r", "pq", "r");
         tab_steps_blue.setLastAccessStep(4);
-        tab_steps_blue.setCurrentStep(0);
+        tab_steps_blue.setStep(0);
     }
 }
