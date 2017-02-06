@@ -44,6 +44,19 @@
         <attr name="denied_color" format="color"/>
         <attr name="animate_time" format="integer"/>
     </declare-styleable>
+    <declare-styleable name="ListSteps">
+        <attr name="background_fill" format="color"/>
+        <attr name="step_radius" format="dimension"/>
+        <attr name="step_back_radius" format="dimension"/>
+        <attr name="mark_radius" format="dimension"/>
+        <attr name="step_margin" format="dimension"/>
+        <attr name="access_fill_color" format="color"/>
+        <attr name="current_fill" format="color"/>
+        <attr name="denied_fill_color" format="color"/>
+        <attr name="access_icon_color" format="color"/>
+        <attr name="denied_icon_color" format="color"/>
+        <attr name="line_color" format="color"/>
+    </declare-styleable>
     <declare-styleable name="StateBadgeButton">
         <attr name="button_icon" format="reference"/>
         <attr name="button_icon_size" format="dimension"/>

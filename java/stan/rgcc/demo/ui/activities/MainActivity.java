@@ -7,6 +7,7 @@ import android.view.View;
 
 import stan.rgcc.demo.R;
 import stan.rgcc.demo.ui.fragments.BackForwardsFragment;
+import stan.rgcc.demo.ui.fragments.ListStepsFragment;
 import stan.rgcc.demo.ui.fragments.StateBadgeFragment;
 import stan.rgcc.demo.ui.fragments.StepsFragment;
 import stan.rgcc.demo.ui.fragments.SwitchsFragment;
@@ -20,6 +21,7 @@ public class MainActivity
     private final Fragment stepsFragment = new StepsFragment();
     private final Fragment tabStepsFragment = new TabStepsFragment();
     private final Fragment statebadgeFragment = new StateBadgeFragment();
+    private final Fragment listStepsFragment = new ListStepsFragment();
     private Fragment currentFragment;
 
     private final View.OnClickListener clickListener = new View.OnClickListener()
@@ -49,6 +51,10 @@ public class MainActivity
                     currentFragment = statebadgeFragment;
                     replaceFragment();
                     break;
+                case R.id.liststeps:
+                    currentFragment = listStepsFragment;
+                    replaceFragment();
+                    break;
             }
         }
     };
@@ -68,12 +74,14 @@ public class MainActivity
                 ,findViewById(R.id.bckfwds)
                 ,findViewById(R.id.steps)
                 ,findViewById(R.id.tabsteps)
-                ,findViewById(R.id.statebadge));
+                ,findViewById(R.id.statebadge)
+                ,findViewById(R.id.liststeps)
+        );
     }
 
     private void init()
     {
-        currentFragment = statebadgeFragment;
+        currentFragment = listStepsFragment;
         replaceFragment();
     }
 
