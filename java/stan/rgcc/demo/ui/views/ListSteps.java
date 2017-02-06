@@ -1,5 +1,8 @@
 package stan.rgcc.demo.ui.views;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -12,7 +15,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 
 import stan.rgcc.demo.R;
 
@@ -36,8 +42,12 @@ public class ListSteps
     private int lastAccessStep;
     private int currentStep;
     private Interpolator interpolator;
+    private Interpolator drawableInterpolator;
+    private int animateTime;
 
     private int stepSize;
+    private int drawableSize;
+    private int drawableY;
     private int minWidth;
     private int allHeight;
     private int centerX;
@@ -55,6 +65,8 @@ public class ListSteps
     private Paint accessFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint deniedFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private AnimatorSet stepsAnimation = new AnimatorSet();
+    private AnimatorSet drawableAnimation = new AnimatorSet();
 
     private ChangeStepListener listener;
 
@@ -63,6 +75,7 @@ public class ListSteps
         super(context, attrs);
         density = context.getResources()
                          .getDisplayMetrics().density;
+        animateTime = 300;
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ListSteps, 0, 0);
         try
         {
@@ -84,7 +97,11 @@ public class ListSteps
         {
             typedArray.recycle();
         }
-        interpolator = new AccelerateDecelerateInterpolator();
+        drawableInterpolator = new AccelerateDecelerateInterpolator();
+//        interpolator = new BounceInterpolator();
+        interpolator = new AnticipateOvershootInterpolator(1.5f);
+//        interpolator = new OvershootInterpolator(1.5f);
+//        interpolator = new AccelerateDecelerateInterpolator();
         currentStep = -1;
     }
 
@@ -125,18 +142,9 @@ public class ListSteps
         {
 //            canvas.drawRect(mark_radius, y, getWidth(), y+1, currentPaint);
             y += step_margin;
-            steps[i].setBounds(centerX-step_radius, y, centerX+step_radius, y+step_radius*2);
             if(currentStep == i)
             {
-                if(current_drawable == null)
-                {
-                    canvas.drawCircle(centerX, y+step_radius, step_radius, accessFillPaint);
-                }
-                else
-                {
-                    current_drawable.setBounds(centerX-current_drawable_size/2, (y+step_radius)-current_drawable_size/2, centerX+current_drawable_size/2, (y+step_radius)+current_drawable_size/2);
-                    current_drawable.draw(canvas);
-                }
+                canvas.drawCircle(centerX, y+step_radius, step_radius, accessFillPaint);
                 steps[i].setColorFilter(current_fill, PorterDuff.Mode.SRC_IN);
             }
             else if(i > lastAccessStep)
@@ -149,6 +157,12 @@ public class ListSteps
                 canvas.drawCircle(centerX, y+step_radius, step_radius, accessFillPaint);
                 steps[i].setColorFilter(access_icon_color, PorterDuff.Mode.SRC_IN);
             }
+            if(y > drawableY && y<drawableY+stepSize && current_drawable != null)
+            {
+                current_drawable.setBounds(centerX-drawableSize/2, (drawableY+step_margin+step_radius)-drawableSize/2, centerX+drawableSize/2, (drawableY+step_margin+step_radius)+drawableSize/2);
+                current_drawable.draw(canvas);
+            }
+            steps[i].setBounds(centerX-step_radius, y, centerX+step_radius, y+step_radius*2);
             steps[i].draw(canvas);
             y += step_radius*2;
             y += step_margin;
@@ -237,10 +251,13 @@ public class ListSteps
 
     public void setCurrentDrawable(Drawable cd)
     {
-        current_drawable = cd;
-        if(current_drawable != null)
+        if(cd != null)
         {
-            current_drawable.mutate();
+            current_drawable = cd.getConstantState().newDrawable();
+        }
+        else
+        {
+            current_drawable = null;
         }
         recalculate();
     }
@@ -328,12 +345,14 @@ public class ListSteps
         {
             step = 0;
         }
+        animateSteps(step, animateTime);
         currentStep = step;
         recalculate();
     }
     public void setOldStep()
     {
         currentStep = oldStep;
+        animateSteps(currentStep, 200);
         recalculate();
     }
     public void setLastAccessStep(int step)
@@ -349,6 +368,75 @@ public class ListSteps
         lastAccessStep = step;
         recalculate();
     }
+    public void setAnimateTime(int at)
+    {
+        animateTime = at;
+    }
+    public void setCurrentCenterY(int value)
+    {
+        currentCenterY = value;
+        invalidate();
+    }
+    public void setDrawableSize(int value)
+    {
+        drawableSize = value;
+        invalidate();
+    }
+    private void animateDrawable(final int duration, boolean show)
+    {
+        drawableAnimation.removeAllListeners();
+        drawableAnimation.cancel();
+        drawableAnimation = new AnimatorSet();
+        drawableAnimation.setInterpolator(drawableInterpolator);
+//        drawableAnimation.setInterpolator(interpolator);
+        if(show)
+        {
+            drawableAnimation.play(ObjectAnimator.ofInt(this, "drawableSize", current_drawable_size/2, current_drawable_size));
+        }
+        else
+        {
+            drawableAnimation.play(ObjectAnimator.ofInt(this, "drawableSize", current_drawable_size, current_drawable_size/2));
+            drawableAnimation.addListener(new Animator.AnimatorListener()
+            {
+                @Override
+                public void onAnimationStart(Animator animator)
+                {
+                }
+                @Override
+                public void onAnimationEnd(Animator animator)
+                {
+                    drawableY = currentY;
+                    animateDrawable(duration, true);
+                }
+                @Override
+                public void onAnimationCancel(Animator animator)
+                {
+                }
+                @Override
+                public void onAnimationRepeat(Animator animator)
+                {
+                }
+            });
+        }
+        drawableAnimation.setDuration(duration);
+        drawableAnimation.start();
+    }
+    private void animateSteps(int step, int duration)
+    {
+        stepsAnimation.removeAllListeners();
+        stepsAnimation.cancel();
+        stepsAnimation = new AnimatorSet();
+        stepsAnimation.setInterpolator(interpolator);
+        int h = 0;
+        for(int i=0; i<step; i++)
+        {
+            h += stepSize;
+        }
+        stepsAnimation.play(ObjectAnimator.ofInt(this, "currentCenterY", currentCenterY, h + stepSize/2));
+        stepsAnimation.setDuration(duration);
+        stepsAnimation.start();
+        animateDrawable(duration/2, false);
+    }
 
     private void recalculate()
     {
@@ -358,6 +446,7 @@ public class ListSteps
         currentPaint.setColor(current_fill);
         accessFillPaint.setColor(access_fill_color);
         deniedFillPaint.setColor(denied_fill_color);
+        drawableSize = current_drawable_size;
         stepSize = step_margin*2 + step_radius*2;
         minWidth = mark_radius*2 + step_radius*2;
         allHeight = 0;
