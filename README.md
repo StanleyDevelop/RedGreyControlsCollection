@@ -24,8 +24,8 @@ RedGrey design controls collection
 # Build information
 ## defaultConfig
 	applicationId "stan.rgcc.demo"
-	versionCode 1702061512
-	versionName "0.013"
+	versionCode 1702061855
+	versionName "0.014"
 ## dependencies
 	com.android.support:support-fragment:25.1.1
 ## gradle
