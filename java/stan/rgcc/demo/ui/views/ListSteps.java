@@ -42,7 +42,6 @@ public class ListSteps
     private int lastAccessStep;
     private int currentStep;
     private Interpolator interpolator;
-    private Interpolator drawableInterpolator;
     private int animateTime;
 
     private int stepSize;
@@ -97,11 +96,7 @@ public class ListSteps
         {
             typedArray.recycle();
         }
-        drawableInterpolator = new AccelerateDecelerateInterpolator();
-//        interpolator = new BounceInterpolator();
-        interpolator = new AnticipateOvershootInterpolator(1.5f);
-//        interpolator = new OvershootInterpolator(1.5f);
-//        interpolator = new AccelerateDecelerateInterpolator();
+        interpolator = new AccelerateDecelerateInterpolator();
         currentStep = -1;
     }
 
@@ -142,20 +137,25 @@ public class ListSteps
         {
 //            canvas.drawRect(mark_radius, y, getWidth(), y+1, currentPaint);
             y += step_margin;
-            if(currentStep == i)
+            if(oldStep == i)
             {
-                canvas.drawCircle(centerX, y+step_radius, step_radius, accessFillPaint);
                 steps[i].setColorFilter(current_fill, PorterDuff.Mode.SRC_IN);
             }
             else if(i > lastAccessStep)
             {
-                canvas.drawCircle(centerX, y+step_radius, step_radius, deniedFillPaint);
                 steps[i].setColorFilter(denied_icon_color, PorterDuff.Mode.SRC_IN);
             }
             else
             {
-                canvas.drawCircle(centerX, y+step_radius, step_radius, accessFillPaint);
                 steps[i].setColorFilter(access_icon_color, PorterDuff.Mode.SRC_IN);
+            }
+            if(i > lastAccessStep)
+            {
+                canvas.drawCircle(centerX, y+step_radius, step_radius, deniedFillPaint);
+            }
+            else
+            {
+                canvas.drawCircle(centerX, y+step_radius, step_radius, accessFillPaint);
             }
             if(y > drawableY && y<drawableY+stepSize && current_drawable != null)
             {
@@ -225,6 +225,7 @@ public class ListSteps
                     {
                         listener.changeStep(currentStep);
                     }
+                    invalidate();
                 }
                 break;
             }
@@ -243,7 +244,7 @@ public class ListSteps
                 {
 //                    animateRipple(x, y, i, animateTime, null);
                 }
-                setStep(i);
+                setCurrentStep(i);
                 return;
             }
         }
@@ -347,13 +348,24 @@ public class ListSteps
         }
         animateSteps(step, animateTime);
         currentStep = step;
-        recalculate();
+        recalculateCurrent();
+        oldStep = currentStep;
+    }
+    private void setCurrentStep(int step)
+    {
+        if(step == currentStep)
+        {
+            return;
+        }
+        animateSteps(step, animateTime);
+        currentStep = step;
+        recalculateCurrent();
     }
     public void setOldStep()
     {
         currentStep = oldStep;
         animateSteps(currentStep, 200);
-        recalculate();
+        recalculateCurrent();
     }
     public void setLastAccessStep(int step)
     {
@@ -387,8 +399,7 @@ public class ListSteps
         drawableAnimation.removeAllListeners();
         drawableAnimation.cancel();
         drawableAnimation = new AnimatorSet();
-        drawableAnimation.setInterpolator(drawableInterpolator);
-//        drawableAnimation.setInterpolator(interpolator);
+        drawableAnimation.setInterpolator(interpolator);
         if(show)
         {
             drawableAnimation.play(ObjectAnimator.ofInt(this, "drawableSize", current_drawable_size/2, current_drawable_size));
@@ -405,6 +416,7 @@ public class ListSteps
                 @Override
                 public void onAnimationEnd(Animator animator)
                 {
+//                    recalculate();
                     drawableY = currentY;
                     animateDrawable(duration, true);
                 }
@@ -459,6 +471,13 @@ public class ListSteps
             }
             allHeight += stepSize;
         }
+        recalculateCurrent();
+        currentCenterY = currentY + stepSize/2;
+        oldStep = currentStep;
+        invalidate();
+    }
+    private void recalculateCurrent()
+    {
         currentY = 0;
         if(steps.length > 0)
         {
@@ -468,9 +487,7 @@ public class ListSteps
                 y += stepSize;
             }
             currentY = y;
-            currentCenterY = y + stepSize/2;
         }
-        invalidate();
     }
 
     public void setListener(ChangeStepListener l)
