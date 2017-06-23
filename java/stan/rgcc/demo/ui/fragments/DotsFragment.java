@@ -1,7 +1,8 @@
 package stan.rgcc.demo.ui.fragments;
 
-import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,10 @@ public class DotsFragment
     extends UtilFragment
 {
     private Dots dots;
+    private Switch select_enabled;
+    private Switch try_add_enabled;
+    private Switch show_numbers;
+
     private List<Dots.Dot> dotList;
 
     protected View.OnClickListener setClickListener()
@@ -24,7 +29,9 @@ public class DotsFragment
             {
                 switch(view.getId())
                 {
-                    case R.id.step1:
+                    case R.id.clear:
+                        dotList.clear();
+                        dots.clearDots();
                         break;
                 }
             }
@@ -37,6 +44,10 @@ public class DotsFragment
     protected void initViews(View v)
     {
         dots = findView(R.id.dots);
+        select_enabled = findView(R.id.select_enabled);
+        try_add_enabled = findView(R.id.try_add_enabled);
+        show_numbers = findView(R.id.show_numbers);
+        setClickListener(findView(R.id.clear));
     }
     protected void init()
     {
@@ -55,6 +66,27 @@ public class DotsFragment
             public void selectDot(Dots.Dot dot)
             {
                 log("select dot " + dot.getId() + " " + dot.getXPercent() + " " + dot.getYPercent());
+            }
+        });
+        select_enabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                dots.setSelectEnabled(isChecked);
+            }
+        });
+        try_add_enabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                dots.setTryAddEnabled(isChecked);
+            }
+        });
+        show_numbers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                dots.showNumbers(isChecked);
             }
         });
     }

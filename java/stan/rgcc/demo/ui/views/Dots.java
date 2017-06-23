@@ -25,6 +25,9 @@ public class Dots
     private int dot_size;
     private int dot_text_color;
     private int dot_text_size;
+    private boolean selectEnabled;
+    private boolean tryAddEnabled;
+    private boolean showNumbers;
 
     private Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private int textHeight;
@@ -95,7 +98,10 @@ public class Dots
     {
         if(dots.isEmpty())
         {
-            listener.newDot((int)(x*100/getWidth()), (int)(y*100/getHeight()));
+            if(tryAddEnabled)
+            {
+                listener.newDot((int)(x*100/getWidth()), (int)(y*100/getHeight()));
+            }
             return;
         }
         Dot nearestDot = dots.get(0);
@@ -113,11 +119,17 @@ public class Dots
         }
         if(nearestLength > px(44))
         {
-            listener.newDot((int)(x*100/getWidth()), (int)(y*100/getHeight()));
+            if(tryAddEnabled)
+            {
+                listener.newDot((int)(x*100/getWidth()), (int)(y*100/getHeight()));
+            }
         }
         else
         {
-            listener.selectDot(nearestDot);
+            if(selectEnabled)
+            {
+                listener.selectDot(nearestDot);
+            }
         }
     }
 
@@ -132,7 +144,10 @@ public class Dots
             int yCenter = getHeight()*dots.get(i).getYPercent()/100;
             dot_icon.setBounds(xCenter - dot_size/2, yCenter - dot_size/2, xCenter + dot_size/2, yCenter + dot_size/2);
             dot_icon.draw(canvas);
-            canvas.drawText(Integer.toString(i+1), xCenter - (i > 9 ? textWidth : textWidth/2), yCenter + textHeight/2, textPaint);
+            if(showNumbers)
+            {
+                canvas.drawText(Integer.toString(i+1), xCenter - (i+1 > 9 ? textWidth : textWidth/2), yCenter + textHeight/2, textPaint);
+            }
         }
     }
 
@@ -193,9 +208,27 @@ public class Dots
         dots.add(dot);
         invalidate();
     }
+    public void clearDots()
+    {
+        dots = Collections.emptyList();
+        invalidate();
+    }
     public void setListener(Listener l)
     {
         listener = l;
+    }
+    public void setSelectEnabled(boolean enabled)
+    {
+        selectEnabled = enabled;
+    }
+    public void setTryAddEnabled(boolean enabled)
+    {
+        tryAddEnabled = enabled;
+    }
+    public void showNumbers(boolean show)
+    {
+        showNumbers = show;
+        invalidate();
     }
 
     private int px(float dp)
