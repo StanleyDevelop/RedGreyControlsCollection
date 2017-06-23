@@ -1,12 +1,13 @@
 package stan.rgcc.demo.ui.activities;
 
-import android.support.v4.app.Fragment;
+import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import stan.rgcc.demo.R;
 import stan.rgcc.demo.ui.fragments.BackForwardsFragment;
+import stan.rgcc.demo.ui.fragments.DotsFragment;
 import stan.rgcc.demo.ui.fragments.ListStepsFragment;
 import stan.rgcc.demo.ui.fragments.StateBadgeFragment;
 import stan.rgcc.demo.ui.fragments.StepsFragment;
@@ -14,7 +15,7 @@ import stan.rgcc.demo.ui.fragments.SwitchsFragment;
 import stan.rgcc.demo.ui.fragments.TabStepsFragment;
 
 public class MainActivity
-        extends FragmentActivity
+        extends Activity
 {
     private final Fragment switchsFragment = new SwitchsFragment();
     private final Fragment bckfwdFragment = new BackForwardsFragment();
@@ -22,6 +23,7 @@ public class MainActivity
     private final Fragment tabStepsFragment = new TabStepsFragment();
     private final Fragment statebadgeFragment = new StateBadgeFragment();
     private final Fragment listStepsFragment = new ListStepsFragment();
+    private final Fragment dotsFragment = new DotsFragment();
     private Fragment currentFragment;
 
     private final View.OnClickListener clickListener = new View.OnClickListener()
@@ -55,11 +57,14 @@ public class MainActivity
                     currentFragment = listStepsFragment;
                     replaceFragment();
                     break;
+                case R.id.dots:
+                    currentFragment = dotsFragment;
+                    replaceFragment();
+                    break;
             }
         }
     };
 
-    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -67,7 +72,6 @@ public class MainActivity
         initViews();
         init();
     }
-
     private void initViews()
     {
         setClickListener(findViewById(R.id.switchs)
@@ -76,18 +80,18 @@ public class MainActivity
                 ,findViewById(R.id.tabsteps)
                 ,findViewById(R.id.statebadge)
                 ,findViewById(R.id.liststeps)
+                ,findViewById(R.id.dots)
         );
     }
-
     private void init()
     {
-        currentFragment = listStepsFragment;
+        currentFragment = dotsFragment;
         replaceFragment();
     }
 
     private void replaceFragment()
     {
-        getSupportFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction()
                             .replace(R.id.main_frame, currentFragment)
                             .commit();
     }
@@ -96,7 +100,6 @@ public class MainActivity
     {
         return (VIEW)findViewById(id);
     }
-
     private void setClickListener(View... views)
     {
         for(View v : views)

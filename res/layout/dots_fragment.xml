@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@color/blue"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <stan.rgcc.demo.ui.views.Dots
+        android:id="@+id/dots"
+        android:background="@color/white"
+        app:dot_icon="@drawable/dot"
+        app:dot_size="44dp"
+        app:dot_text_color="@color/white"
+        app:dot_text_size="20dp"
+        android:layout_width="256dp"
+        android:layout_height="256dp"/>
+</LinearLayout>

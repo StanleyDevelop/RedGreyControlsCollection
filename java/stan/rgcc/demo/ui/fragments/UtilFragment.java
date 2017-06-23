@@ -1,7 +1,8 @@
 package stan.rgcc.demo.ui.fragments;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,5 +43,9 @@ public abstract class UtilFragment
                 v.setOnClickListener(clickListener);
             }
         }
+    }
+    final protected void log(String message)
+    {
+        Log.e(getClass().getName(), message);
     }
 }
