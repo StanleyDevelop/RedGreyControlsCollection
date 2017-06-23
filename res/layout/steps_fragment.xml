@@ -52,4 +52,21 @@
             app:steps_count="3"
             app:steps_orientation="1"/>
     </LinearLayout>
+    <FrameLayout
+        android:background="@color/white"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <stan.rgcc.demo.ui.views.TextSteps
+            android:id="@+id/text_steps"
+            android:layout_gravity="center"
+            app:between_steps_padding="12dp"
+            app:current_step_circle_color="@color/red"
+            app:step_circle_color="@color/graylight"
+            app:step_circle_radius="16dp"
+            app:step_text_color="@color/white"
+            app:step_text_size="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 </LinearLayout>

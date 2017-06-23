@@ -6,12 +6,14 @@ import android.widget.TextView;
 
 import stan.rgcc.demo.R;
 import stan.rgcc.demo.ui.views.Steps;
+import stan.rgcc.demo.ui.views.TextSteps;
 
 public class StepsFragment
         extends UtilFragment
 {
     private TextView steps_white_text;
     private Steps steps_white;
+    private TextSteps text_steps;
 
     @Override
     protected View.OnClickListener setClickListener()
@@ -30,6 +32,7 @@ public class StepsFragment
     {
         steps_white_text = findView(R.id.steps_white_text);
         steps_white = findView(R.id.steps_white);
+        text_steps = findView(R.id.text_steps);
     }
 
     @Override
@@ -44,5 +47,6 @@ public class StepsFragment
                 steps_white_text.setText("newStep " + newStep);
             }
         });
+        text_steps.setSteps("first", "second", "third", "other");
     }
 }

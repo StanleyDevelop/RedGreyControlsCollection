@@ -85,7 +85,7 @@ public class MainActivity
     }
     private void init()
     {
-        currentFragment = dotsFragment;
+        currentFragment = stepsFragment;
         replaceFragment();
     }
 
