@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@color/red"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <stan.rgcc.demo.ui.views.QueueDots
+        android:id="@+id/queue"
+        android:background="@color/white"
+        app:dot_radius="54dp"
+        app:color_not_init="@color/gray"
+        app:color_init="@color/green"
+        app:color_current="@color/blue"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/previous"
+            android:text="previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/next"
+            android:text="next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/reload"
+        android:text="reload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

@@ -9,6 +9,7 @@ import stan.rgcc.demo.R;
 import stan.rgcc.demo.ui.fragments.BackForwardsFragment;
 import stan.rgcc.demo.ui.fragments.DotsFragment;
 import stan.rgcc.demo.ui.fragments.ListStepsFragment;
+import stan.rgcc.demo.ui.fragments.QueueDotsFragment;
 import stan.rgcc.demo.ui.fragments.StateBadgeFragment;
 import stan.rgcc.demo.ui.fragments.StepsFragment;
 import stan.rgcc.demo.ui.fragments.SwitchsFragment;
@@ -24,6 +25,7 @@ public class MainActivity
     private final Fragment statebadgeFragment = new StateBadgeFragment();
     private final Fragment listStepsFragment = new ListStepsFragment();
     private final Fragment dotsFragment = new DotsFragment();
+    private final Fragment queueFragment = new QueueDotsFragment();
     private Fragment currentFragment;
 
     private final View.OnClickListener clickListener = new View.OnClickListener()
@@ -61,6 +63,10 @@ public class MainActivity
                     currentFragment = dotsFragment;
                     replaceFragment();
                     break;
+                case R.id.queue:
+                    currentFragment = queueFragment;
+                    replaceFragment();
+                    break;
             }
         }
     };
@@ -81,11 +87,12 @@ public class MainActivity
                 ,findViewById(R.id.statebadge)
                 ,findViewById(R.id.liststeps)
                 ,findViewById(R.id.dots)
+                ,findViewById(R.id.queue)
         );
     }
     private void init()
     {
-        currentFragment = stepsFragment;
+        currentFragment = queueFragment;
         replaceFragment();
     }
 

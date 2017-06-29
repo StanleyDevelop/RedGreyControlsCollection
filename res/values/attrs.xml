@@ -78,4 +78,10 @@
         <attr name="dot_text_color" format="color"/>
         <attr name="dot_text_size" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="QueueDots">
+        <attr name="dot_radius" format="dimension"/>
+        <attr name="color_not_init" format="color"/>
+        <attr name="color_init" format="color"/>
+        <attr name="color_current" format="color"/>
+    </declare-styleable>
 </resources>
