@@ -13,13 +13,21 @@ RedGrey design controls collection
 
 <img src="media/backforward_sample.gif" width="179" height="317" />
 
-- [Steps](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/Steps.java)
+- [Steps](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/Steps.java) and [TextSteps](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/TextSteps.java)
 
-<img src="media/steps_sample.gif" width="179" height="317" />
+<img src="media/steps_sample.gif" width="179" height="318" />
 
 - [TabSteps](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/TabSteps.java)
 
 <img src="media/tabsteps_sample.gif" width="179" height="317" />
+
+- [ListSteps](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/ListSteps.java)
+
+<img src="media/liststeps_sample.gif" width="179" height="318" />
+
+- [Dots](https://github.com/StanleyDevelop/RedGreyControlsCollection/blob/master/java/stan/rgcc/demo/ui/views/Dots.java)
+
+<img src="media/dots_sample.gif" width="179" height="318" />
 
 # Build information
 ## defaultConfig

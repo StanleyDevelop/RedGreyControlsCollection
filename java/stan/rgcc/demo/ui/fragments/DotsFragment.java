@@ -66,6 +66,7 @@ public class DotsFragment
             public void selectDot(Dots.Dot dot)
             {
                 log("select dot " + dot.getId() + " " + dot.getXPercent() + " " + dot.getYPercent());
+                toast("select dot " + dot.getXPercent() + " " + dot.getYPercent());
             }
         });
         select_enabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public abstract class UtilFragment
     extends Fragment
@@ -47,5 +48,9 @@ public abstract class UtilFragment
     final protected void log(String message)
     {
         Log.e(getClass().getName(), message);
+    }
+    final protected void toast(String message)
+    {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }
