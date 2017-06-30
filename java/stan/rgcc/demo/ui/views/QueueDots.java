@@ -39,15 +39,16 @@ public class QueueDots
             return d1.order() > d2.order() ? 1 : d1.order() < d2.order() ? -1 : 0;
         }
     };
+    private int currentDotId;
     private final Listener emptyListener = new Listener()
     {
-        public void first()
+        public void first(Dot dot)
         {
         }
-        public void nextDot(Dot dot)
+        public void nextDot(Dot previousDot, Dot nextDot)
         {
         }
-        public void last()
+        public void last(Dot dot)
         {
         }
     };
@@ -127,20 +128,21 @@ public class QueueDots
         }
         if(nearestLength < dot_size)
         {
+            Dot previousDot = null;
             for(Dot dot : dots)
             {
-                if(dot.state == Dot.State.CURRENT)
+                if(dot.getId() == currentDotId)
                 {
                     if(dot.getId() == nearestDot.getId())
                     {
                         return;
                     }
-                    dot.changeState(Dot.State.INIT);
+                    previousDot = dot;
                     break;
                 }
             }
-            nearestDot.changeState(Dot.State.CURRENT);
-            listener.nextDot(nearestDot);
+            currentDotId = nearestDot.getId();
+            listener.nextDot(previousDot, nearestDot);
             invalidate();
         }
     }
@@ -154,7 +156,14 @@ public class QueueDots
         {
             int xCenter = getWidth()*dot.getXPercent()/100;
             int yCenter = getHeight()*dot.getYPercent()/100;
-            canvas.drawCircle(xCenter, yCenter, dot_size/2, dot.state == Dot.State.NOT_INIT ? dotNotInitPaint : dot.state == Dot.State.INIT ? dotInitPaint : dotCurrentPaint);
+            if(currentDotId == dot.getId())
+            {
+                canvas.drawCircle(xCenter, yCenter, dot_size/2, dotCurrentPaint);
+            }
+            else
+            {
+                canvas.drawCircle(xCenter, yCenter, dot_size/2, dot.init() ? dotInitPaint : dotNotInitPaint);
+            }
         }
 //        for(int i=0; i<dots.size(); i++)
 //        {
@@ -202,7 +211,7 @@ public class QueueDots
         Collections.sort(dots, dotsComparator);
         if(!dots.isEmpty())
         {
-            dots.get(0).changeState(Dot.State.CURRENT);
+            currentDotId = dots.get(0).getId();
         }
         invalidate();
     }
@@ -231,17 +240,16 @@ public class QueueDots
     {
         for(int i=0; i<dots.size(); i++)
         {
-            if(dots.get(i).state == Dot.State.CURRENT)
+            if(dots.get(i).getId() == currentDotId)
             {
                 if(dots.size() > i+1)
                 {
-                    dots.get(i).changeState(Dot.State.INIT);
-                    dots.get(i+1).changeState(Dot.State.CURRENT);
-                    listener.nextDot(dots.get(i+1));
+                    currentDotId = dots.get(i+1).getId();
+                    listener.nextDot(dots.get(i), dots.get(i+1));
                 }
                 else
                 {
-                    listener.last();
+                    listener.last(dots.get(i));
                 }
                 invalidate();
                 return;
@@ -252,22 +260,32 @@ public class QueueDots
     {
         for(int i=0; i<dots.size(); i++)
         {
-            if(dots.get(i).state == Dot.State.CURRENT)
+            if(dots.get(i).getId() == currentDotId)
             {
                 if(i > 0)
                 {
-                    dots.get(i).changeState(Dot.State.INIT);
-                    dots.get(i-1).changeState(Dot.State.CURRENT);
-                    listener.nextDot(dots.get(i-1));
+                    currentDotId = dots.get(i-1).getId();
+                    listener.nextDot(dots.get(i), dots.get(i-1));
                 }
                 else
                 {
-                    listener.first();
+                    listener.first(dots.get(i));
                 }
                 invalidate();
                 return;
             }
         }
+    }
+    public boolean allDotsInit()
+    {
+        for(Dot dot: dots)
+        {
+            if(!dot.init())
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int px(float dp)
@@ -285,19 +303,19 @@ public class QueueDots
         private final int xPercent;
         private final int yPercent;
         private final int order;
-        private State state;
+        private boolean init;
 
         public Dot(int i, int x, int y, int o)
         {
-            this(i, x, y, o, State.NOT_INIT);
+            this(i, x, y, o, false);
         }
-        public Dot(int i, int x, int y, int o, State s)
+        public Dot(int i, int x, int y, int o, boolean is)
         {
             id = i;
             xPercent = x;
             yPercent = y;
             order = o;
-            state = s;
+            init = is;
         }
 
         public int getId()
@@ -316,27 +334,20 @@ public class QueueDots
         {
             return order;
         }
-        protected State state()
+        public boolean init()
         {
-            return state;
+            return init;
         }
-        protected void changeState(State s)
+        public void changeInitState(boolean is)
         {
-            state = s;
-        }
-
-        enum State
-        {
-            NOT_INIT,
-            INIT,
-            CURRENT,
+            init = is;
         }
     }
 
     public interface Listener
     {
-        void first();
-        void nextDot(Dot dot);
-        void last();
+        void first(Dot dot);
+        void nextDot(Dot previousDot, Dot nextDot);
+        void last(Dot dot);
     }
 }
